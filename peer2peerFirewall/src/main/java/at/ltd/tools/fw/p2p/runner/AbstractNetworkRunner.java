@@ -1,4 +1,4 @@
-package at.ltd.tools.wf.p2p.runner;
+package at.ltd.tools.fw.p2p.runner;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

@@ -1,4 +1,4 @@
-package at.ltd.tools.wf.p2p.util;
+package at.ltd.tools.fw.p2p.util;
 
 public class CountryListMapper {
 // TODO blacklist feature - once kicked, always blacklisted

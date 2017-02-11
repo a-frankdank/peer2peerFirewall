@@ -1,4 +1,4 @@
-package at.ltd.tools.wf.ip;
+package at.ltd.tools.fw.ip;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package at.ltd.tools.wf.entities.comparator;
+package at.ltd.tools.fw.entities.comparator;
 
 import static org.junit.Assert.assertEquals;
 
@@ -7,7 +7,8 @@ import java.time.LocalDateTime;
 import org.junit.Before;
 import org.junit.Test;
 
-import at.ltd.tools.wf.entities.ConnectionOrDataReceivedEndpoint;
+import at.ltd.tools.fw.entities.ConnectionOrDataReceivedEndpoint;
+import at.ltd.tools.fw.entities.comparator.ConnectionOrDataReceivedEndpointComparator;
 
 public class TestCaseConnectionOrDataReceivedEndpointComparator {
 

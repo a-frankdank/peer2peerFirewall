@@ -8,9 +8,9 @@ import org.junit.Test;
 
 import com.github.ffalcinelli.jdivert.WinDivert;
 
-import at.ltd.tools.wf.p2p.runner.NetworkDroppingChosenIpRunner;
-import at.ltd.tools.wf.p2p.runner.NetworkLoggingRunner;
-import at.ltd.tools.wf.p2p.runner.NetworkUniqueLoggingRunner;
+import at.ltd.tools.fw.p2p.runner.NetworkDroppingChosenIpRunner;
+import at.ltd.tools.fw.p2p.runner.NetworkLoggingRunner;
+import at.ltd.tools.fw.p2p.runner.NetworkUniqueLoggingRunner;
 
 public class TestIntegrationJDivertCapabilities {
 

@@ -1,4 +1,4 @@
-package at.ltd.tools.wf.entities.comparator;
+package at.ltd.tools.fw.entities.comparator;
 
 @FunctionalInterface
 public interface ComparatorLambda<T> {

@@ -1,4 +1,4 @@
-package at.ltd.tools.wf.entities;
+package at.ltd.tools.fw.entities;
 
 import java.time.LocalDateTime;
 

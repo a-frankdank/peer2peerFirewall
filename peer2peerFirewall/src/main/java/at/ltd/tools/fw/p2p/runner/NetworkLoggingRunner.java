@@ -1,4 +1,4 @@
-package at.ltd.tools.wf.p2p.runner;
+package at.ltd.tools.fw.p2p.runner;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -6,7 +6,7 @@ import org.apache.commons.logging.LogFactory;
 import com.github.ffalcinelli.jdivert.Packet;
 import com.github.ffalcinelli.jdivert.exceptions.WinDivertException;
 
-import at.ltd.tools.wf.p2p.util.NetworkLoggingFormatter;
+import at.ltd.tools.fw.p2p.util.NetworkLoggingFormatter;
 
 public class NetworkLoggingRunner extends AbstractNetworkRunner {
 	private static final Log logger = LogFactory

@@ -1,9 +1,10 @@
-package at.ltd.tools.wf.ip;
+package at.ltd.tools.fw.ip;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
 
+import at.ltd.tools.fw.ip.PublicIpGetter;
 import junit.framework.TestCase;
 
 public class TestIntegrationPublicIpGetter extends TestCase {

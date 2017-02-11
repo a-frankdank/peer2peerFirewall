@@ -1,10 +1,10 @@
-package at.ltd.tools.wf.entities.comparator;
+package at.ltd.tools.fw.entities.comparator;
 
 import java.util.Comparator;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import at.ltd.tools.wf.entities.ConnectionOrDataReceivedEndpoint;
+import at.ltd.tools.fw.entities.ConnectionOrDataReceivedEndpoint;
 
 public class ConnectionOrDataReceivedEndpointComparator
         implements Comparator<ConnectionOrDataReceivedEndpoint> {
