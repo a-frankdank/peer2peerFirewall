@@ -1,0 +1,14 @@
+attribute geolocation:
+https://db-ip.com/about/
+dbip-country-2017-02.zip
+
+countrynames:
+http://data.okfn.org/data/core/country-list
+country_iso3166-2_toLongtext.zip
+
+countryflags:
+http://www.famfamfam.com/lab/icons/flags/
+famfamfam_flag_icons.zip
+
+https://www.ipify.org/
+for public ip

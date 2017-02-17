@@ -9,9 +9,117 @@
 	<groupId>at.ltd.tools.fw.peer2peerFirewall.frontend</groupId>
 	<artifactId>peer2peerFirewall-frontend-poc</artifactId>
 	<dependencies>
+		<!-- for the angular test -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>angularjs</artifactId>
+			<version>1.4.9</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>jasmine</artifactId>
+			<version>2.0.0</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- generally -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+		<!-- greetings test -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional>
+		</dependency>
 	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>ro.isdc.wro4j</groupId>
+				<artifactId>wro4j-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<wroManagerFactory>ro.isdc.wro.maven.plugin.manager.factory.ConfigurableWroManagerFactory</wroManagerFactory>
+					<cssDestinationFolder>${project.build.directory}/classes/static/css</cssDestinationFolder>
+					<jsDestinationFolder>${project.build.directory}/classes/static/js</jsDestinationFolder>
+					<wroFile>${basedir}/src/main/wro/wro.xml</wroFile>
+					<extraConfigFile>${basedir}/src/main/wro/wro.properties</extraConfigFile>
+					<contextFolder>${basedir}/src/main/wro</contextFolder>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.webjars</groupId>
+						<artifactId>jquery</artifactId>
+						<version>2.2.4</version>
+					</dependency>
+					<dependency>
+						<groupId>org.webjars</groupId>
+						<artifactId>angularjs</artifactId>
+						<version>1.4.9</version>
+					</dependency>
+					<dependency>
+						<groupId>org.webjars</groupId>
+						<artifactId>bootstrap</artifactId>
+						<version>3.3.7-1</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>com.github.searls</groupId>
+				<artifactId>jasmine-maven-plugin</artifactId>
+				<version>2.2</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>test</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<additionalContexts>
+						<context>
+							<contextRoot>/lib</contextRoot>
+							<directory>${project.build.directory}/classes/static/js</directory>
+						</context>
+					</additionalContexts>
+					<preloadSources>
+						<source>/lib/angular-bootstrap.js</source>
+						<source>/webjars/angularjs/1.4.9/angular-mocks.js</source>
+					</preloadSources>
+					<jsSrcDir>${project.basedir}/src/main/resources/static/js</jsSrcDir>
+					<jsTestSrcDir>${project.basedir}/src/test/resources/static/js</jsTestSrcDir>
+					<phantomjs>
+						<version>2.1.1</version>
+					</phantomjs>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

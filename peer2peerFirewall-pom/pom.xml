@@ -18,6 +18,7 @@
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-web</artifactId>
+				<version>1.5.1.RELEASE</version>
 			</dependency>
 			<dependency>
 				<groupId>com.github.ffalcinelli</groupId>
@@ -53,7 +54,54 @@
 		</dependencies>
 	</dependencyManagement>
 
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<wro4j.version>1.8.0</wro4j.version>
+		<java.version>1.8</java.version>
+	</properties>
+
 	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>ro.isdc.wro4j</groupId>
+										<artifactId>wro4j-maven-plugin</artifactId>
+										<versionRange>${wro4j.version}</versionRange>
+										<goals>
+											<goal>run</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<execute />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>ro.isdc.wro4j</groupId>
+					<artifactId>wro4j-maven-plugin</artifactId>
+					<version>${wro4j.version}</version>
+					<executions>
+						<execution>
+							<phase>generate-resources</phase>
+							<goals>
+								<goal>run</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -67,5 +115,6 @@
 	</build>
 	<modules>
 		<module>peer2peerFirewall-frontend-poc</module>
+		<module>peer2peerFirewall-backend-poc</module>
 	</modules>
 </project>
