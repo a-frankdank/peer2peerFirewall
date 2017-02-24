@@ -80,7 +80,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<execute />
+										<ignore></ignore>
 									</action>
 								</pluginExecution>
 							</pluginExecutions>

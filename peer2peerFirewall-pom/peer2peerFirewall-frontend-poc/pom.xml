@@ -10,10 +10,10 @@
 	<artifactId>peer2peerFirewall-frontend-poc</artifactId>
 	<dependencies>
 		<!-- for the angular test -->
-		<dependency>
+<!-- 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -88,6 +88,11 @@
 						<groupId>org.webjars</groupId>
 						<artifactId>bootstrap</artifactId>
 						<version>3.3.7-1</version>
+					</dependency>
+					<dependency>
+						<groupId>org.sonatype.sisu.inject</groupId>
+						<artifactId>guice-bean-containers</artifactId>
+						<version>2.3.0</version>
 					</dependency>
 				</dependencies>
 			</plugin>
