@@ -1,4 +1,4 @@
-package at.ltd.tools.fw.peer2peerFirewall.frontend;
+package at.ltd.tools.fw.peer2peerFirewall.backend.REST;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

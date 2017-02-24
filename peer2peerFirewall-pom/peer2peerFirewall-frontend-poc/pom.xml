@@ -9,50 +9,70 @@
 	<groupId>at.ltd.tools.fw.peer2peerFirewall.frontend</groupId>
 	<artifactId>peer2peerFirewall-frontend-poc</artifactId>
 	<dependencies>
-		<!-- for the angular test -->
 <!-- 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency> -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.webjars</groupId>
 			<artifactId>angularjs</artifactId>
 			<version>1.4.9</version>
 			<scope>test</scope>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>org.webjars</groupId>
 			<artifactId>jasmine</artifactId>
 			<version>2.0.0</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- generally -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
 		<!-- greetings test -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<optional>true</optional>
-		</dependency>
 	</dependencies>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>target/frontend</directory>
+				<targetPath>static</targetPath>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
+				<groupId>com.github.eirslett</groupId>
+				<artifactId>frontend-maven-plugin</artifactId>
+				<version>1.3</version>
+
+				<configuration>
+					<nodeVersion>v6.9.1</nodeVersion>
+					<npmVersion>4.0.3</npmVersion>
+					<workingDirectory>src/main/frontend</workingDirectory>
+				</configuration>
+
+				<executions>
+					<execution>
+						<id>install node and npm</id>
+						<goals>
+							<goal>install-node-and-npm</goal>
+						</goals>
+					</execution>
+
+					<execution>
+						<id>npm install</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+					</execution>
+
+					<execution>
+						<id>npm run build</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+
+						<configuration>
+							<arguments>run build</arguments>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>ro.isdc.wro4j</groupId>
@@ -79,11 +99,11 @@
 						<artifactId>jquery</artifactId>
 						<version>2.2.4</version>
 					</dependency>
-					<dependency>
+<!-- 					<dependency>
 						<groupId>org.webjars</groupId>
 						<artifactId>angularjs</artifactId>
 						<version>1.4.9</version>
-					</dependency>
+					</dependency> -->
 					<dependency>
 						<groupId>org.webjars</groupId>
 						<artifactId>bootstrap</artifactId>

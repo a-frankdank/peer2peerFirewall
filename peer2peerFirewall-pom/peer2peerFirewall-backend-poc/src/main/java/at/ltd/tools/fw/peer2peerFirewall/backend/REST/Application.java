@@ -1,4 +1,4 @@
-package at.ltd.tools.fw.peer2peerFirewall.frontend;
+package at.ltd.tools.fw.peer2peerFirewall.backend.REST;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

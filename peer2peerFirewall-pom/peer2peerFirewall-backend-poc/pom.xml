@@ -10,6 +10,15 @@
 	<artifactId>peer2peerFirewall-backend-poc</artifactId>
 	<dependencies>
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>com.github.ffalcinelli</groupId>
 			<artifactId>jdivert</artifactId>
 		</dependency>
@@ -34,5 +43,18 @@
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>at.ltd.tools.fw.peer2peerFirewall.frontend</groupId>
+			<artifactId>peer2peerFirewall-frontend-poc</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
 </project>
