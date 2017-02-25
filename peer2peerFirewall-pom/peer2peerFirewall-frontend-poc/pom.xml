@@ -12,10 +12,13 @@
 	<build>
 		<resources>
 			<resource>
-				<directory>${project.basedir}/src/main/fronted/src</directory>
+				<directory>${project.basedir}/src/main/frontend/src</directory>
+				<excludes>
+					<exclude>*.*</exclude>
+				</excludes>
 			</resource>
 			<resource>
-				<directory>${project.basedir}/target/frontend</directory>
+				<directory>${project.basedir}/frontend-tmp</directory>
 				<targetPath>static</targetPath>
 			</resource>
 		</resources>
@@ -57,6 +60,20 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>${project.basedir}/frontend-tmp</directory>
+							<includes>
+								<include>**/*.*</include>
+							</includes>
+							<followSymlinks>false</followSymlinks>
+						</fileset>
+					</filesets>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
