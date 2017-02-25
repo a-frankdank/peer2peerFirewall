@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class HomeController {
-	@RequestMapping("/resource")
+	@RequestMapping("/api/resource")
 	public Map<String, Object> home() {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("id", UUID.randomUUID().toString());
