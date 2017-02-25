@@ -20,15 +20,14 @@ public class CodrEndpoint {
 		// nothing
 	}
 
-	public CodrEndpoint(
-	        CodrEndpoint endpoint) {
+	public CodrEndpoint(CodrEndpoint endpoint) {
 		this(endpoint.getSrcAdress(), endpoint.getSrcPort(),
 		        endpoint.getDstAdress(), endpoint.getDstPort(),
 		        endpoint.getTimeLastChanged());
 	}
 
-	public CodrEndpoint(String srcAdress, Integer srcPort,
-	        String dstAdress, Integer dstPort, LocalDateTime timeLastChanged) {
+	public CodrEndpoint(String srcAdress, Integer srcPort, String dstAdress,
+	        Integer dstPort, LocalDateTime timeLastChanged) {
 		this.srcAdress = srcAdress;
 		this.srcPort = srcPort;
 		this.dstAdress = dstAdress;

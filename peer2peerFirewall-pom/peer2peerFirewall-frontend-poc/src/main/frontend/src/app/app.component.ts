@@ -1,3 +1,4 @@
+import { CodrEndpoint } from './codrendpoint';
 import { Greeting } from './greeting';
 import { Component } from '@angular/core';
 import { Injectable } from '@angular/core';
@@ -28,12 +29,20 @@ export class AppComponent {
   greeting: Greeting = { id: "", content: "" };
   publicIp: string;
   greetings = GREETINGS;
+  codrs: CodrEndpoint[];
 
   constructor(http: Http) {
     http.get('/api/resource')
       .map(r => r.json())
       .catch(this.handleError)
       .subscribe(greeting => this.greeting = greeting);
+    // TODO make greeting into CodrEndpoint...
+
+    http.get('/api/uniqueCodrs')
+      .map(r => r.json())
+      .catch(this.handleError)
+      .subscribe(codrs => this.codrs = codrs);
+
 
     http.get('/api/publicIp')
       .catch(this.handleError)
@@ -53,6 +62,6 @@ export class AppComponent {
     console.error(errMsg);
     return Observable.throw(errMsg);
   }
-  
-  
+
+
 }

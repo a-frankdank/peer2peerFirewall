@@ -16,6 +16,8 @@ public class NetworkUniqueCodrEndpointRunner extends AbstractNetworkRunner {
 	private static final Log logger = LogFactory
 	        .getLog(NetworkUniqueCodrEndpointRunner.class);
 
+	private Object lock = new Object();
+
 	private Packet packet;
 
 	private CodrEndpointFactory factory;
@@ -33,13 +35,17 @@ public class NetworkUniqueCodrEndpointRunner extends AbstractNetworkRunner {
 
 	public void doRun() throws WinDivertException {
 		packet = getWd().recv();
-		uniqueEntities.add(factory.createCodrEndpoint(packet));
+		synchronized (lock) {
+			uniqueEntities.add(factory.createCodrEndpoint(packet));
+		}
 
 		getWd().send(packet);
 	}
 
 	public Set<CodrEndpoint> getUniqueEntities() {
-		return uniqueEntities;
+		synchronized (lock) {
+			return uniqueEntities;
+		}
 	}
 
 }

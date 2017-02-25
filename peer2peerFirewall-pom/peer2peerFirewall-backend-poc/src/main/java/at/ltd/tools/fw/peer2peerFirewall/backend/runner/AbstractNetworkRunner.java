@@ -22,6 +22,18 @@ public abstract class AbstractNetworkRunner implements Runnable {
 
 	@Override
 	public void run() {
+		// TODO the interupting doesn't work as expected ...
+//		Exception in thread "pool-2-thread-1" java.lang.RuntimeException: WinDivert failed, explanation: https://reqrypt.org/windivert-doc.html#divert_open 
+//			at at.ltd.tools.fw.peer2peerFirewall.backend.runner.AbstractNetworkRunner.run(AbstractNetworkRunner.java:33)
+//			at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+//			at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+//			at java.lang.Thread.run(Thread.java:745)
+//		Caused by: WinDivertException{code=995, message='null'}
+//			at com.github.ffalcinelli.jdivert.exceptions.WinDivertException.throwExceptionOnGetLastError(WinDivertException.java:56)
+//			at com.github.ffalcinelli.jdivert.WinDivert.recv(WinDivert.java:201)
+//			at com.github.ffalcinelli.jdivert.WinDivert.recv(WinDivert.java:170)
+//			at at.ltd.tools.fw.peer2peerFirewall.backend.runner.NetworkUniqueCodrEndpointRunner.doRun(NetworkUniqueCodrEndpointRunner.java:37)
+//			at at.ltd.tools.fw.peer2peerFirewall.backend.runner.AbstractNetworkRunner.run(AbstractNetworkRunner.java:27)
 		while (!Thread.currentThread().isInterrupted()) {
 			try {
 				doRun();
@@ -54,5 +66,9 @@ public abstract class AbstractNetworkRunner implements Runnable {
 	 * should only be called once before starting to 'run' it
 	 */
 	public void init() {
+	}
+
+	public void interrupt() {
+		Thread.currentThread().interrupt();
 	}
 }

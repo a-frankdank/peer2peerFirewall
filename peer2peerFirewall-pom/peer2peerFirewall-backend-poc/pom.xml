@@ -19,6 +19,10 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.github.ffalcinelli</groupId>
 			<artifactId>jdivert</artifactId>
 			<version>1.0</version>
@@ -43,6 +47,10 @@
 		<dependency>
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>at.ltd.tools.fw.peer2peerFirewall.frontend</groupId>
@@ -85,7 +93,7 @@
 							<jvmArguments>
 								-Dcom.sun.management.jmxremote
 								-Dcom.sun.management.jmxremote.port=1099
-								f -Dcom.sun.management.jmxremote.ssl=false
+								-Dcom.sun.management.jmxremote.ssl=false
 								-Dcom.sun.management.jmxremote.authenticate=false
 								-Djava.rmi.server.hostname=127.0.0.1
 								-Xdebug

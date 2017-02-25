@@ -18,9 +18,26 @@
 		<input [(ngModel)]="greeting.content" placeholder="content">
 	</div>
 </div>
+<br />
+<br />
+<h1>Networkstatus:</h1>
+<ul class="codrs">
+	<li *ngFor="let codr of codrs"><div
+			style="overflow: hidden; white-space: nowrap;">
+			<div>{{codr?.srcAdress}}:{{codr?.srcPort}}</div>
+			<div>{{codr?.dstAdress}}:{{codr?.dstPort}}</div>
+			<div>{{codr?.timeLastChanged}}</div>
+			<!--
+  | date:'yMMdd-HH:mm:ss' 
+ -->
+
+		</div></li>
+</ul>
+<br />
+<br />
+
 <h1>All them greetings</h1>
 <ul class="greetings">
-	<li *ngFor="let greeting of greetings">
-	<span class="badge">{{greeting?.id}}</span>
+	<li *ngFor="let greeting of greetings"><span class="badge">{{greeting?.id}}</span>
 		{{greeting?.content}}</li>
 </ul>

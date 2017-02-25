@@ -10,4 +10,5 @@ public class Application {
 	public static void main(String... strings) {
 		SpringApplication.run(Application.class, strings);
 	}
+	// TODO wenn this application shuts down, WD has to be turned off !
 }
