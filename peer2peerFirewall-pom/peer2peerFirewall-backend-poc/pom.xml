@@ -21,6 +21,7 @@
 		<dependency>
 			<groupId>com.github.ffalcinelli</groupId>
 			<artifactId>jdivert</artifactId>
+			<version>1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -52,9 +53,48 @@
 	<build>
 		<plugins>
 			<plugin>
+				<!-- start with spring-boot:start, stop with spring-boot:stop ... FUCK 
+					run -->
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<fork>true</fork>
+					<jmxPort>1099</jmxPort>
+					<jvmArguments>
+						-Dcom.sun.management.jmxremote
+						-Dcom.sun.management.jmxremote.port=1099
+						-Dcom.sun.management.jmxremote.ssl=false
+						-Dcom.sun.management.jmxremote.authenticate=false
+						-Djava.rmi.server.hostname=127.0.0.1
+					</jvmArguments>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
+	<profiles>
+		<profile>
+			<id>DEBUG</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<configuration>
+							<fork>true</fork>
+							<jmxPort>1099</jmxPort>
+							<jvmArguments>
+								-Dcom.sun.management.jmxremote
+								-Dcom.sun.management.jmxremote.port=1099
+								f -Dcom.sun.management.jmxremote.ssl=false
+								-Dcom.sun.management.jmxremote.authenticate=false
+								-Djava.rmi.server.hostname=127.0.0.1
+								-Xdebug
+								-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005
+							</jvmArguments>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>

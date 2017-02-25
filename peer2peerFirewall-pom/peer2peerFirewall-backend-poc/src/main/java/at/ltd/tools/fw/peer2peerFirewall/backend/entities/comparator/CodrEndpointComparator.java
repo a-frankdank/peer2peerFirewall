@@ -4,15 +4,15 @@ import java.util.Comparator;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import at.ltd.tools.fw.peer2peerFirewall.backend.entities.ConnectionOrDataReceivedEndpoint;
+import at.ltd.tools.fw.peer2peerFirewall.backend.entities.CodrEndpoint;
 
-public class ConnectionOrDataReceivedEndpointComparator
-        implements Comparator<ConnectionOrDataReceivedEndpoint> {
+public class CodrEndpointComparator
+        implements Comparator<CodrEndpoint> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public int compare(ConnectionOrDataReceivedEndpoint o1,
-	        ConnectionOrDataReceivedEndpoint o2) {
+	public int compare(CodrEndpoint o1,
+	        CodrEndpoint o2) {
 		// a negative integer, zero, or a positive integer as the first argument
 		// is
 		// less than, equal to, or greater than the second.
@@ -24,12 +24,12 @@ public class ConnectionOrDataReceivedEndpointComparator
 		        (x, y) -> x.getDstPort().compareTo(y.getDstPort()));
 	}
 
-	public int calcResults(ConnectionOrDataReceivedEndpoint o1,
-	        ConnectionOrDataReceivedEndpoint o2,
-	        @SuppressWarnings("unchecked") ComparatorLambda<ConnectionOrDataReceivedEndpoint>... elems) {
+	public int calcResults(CodrEndpoint o1,
+	        CodrEndpoint o2,
+	        @SuppressWarnings("unchecked") ComparatorLambda<CodrEndpoint>... elems) {
 		if (ArrayUtils.isNotEmpty(elems)) {
 			int result = -2;
-			for (ComparatorLambda<ConnectionOrDataReceivedEndpoint> elem : elems) {
+			for (ComparatorLambda<CodrEndpoint> elem : elems) {
 				result = elem.comp(o1, o2);
 				if (result != 0) {
 					return result;
