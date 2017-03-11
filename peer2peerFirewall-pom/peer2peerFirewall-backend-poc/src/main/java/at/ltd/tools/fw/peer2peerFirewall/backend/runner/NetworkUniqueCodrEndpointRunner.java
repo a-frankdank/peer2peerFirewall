@@ -34,19 +34,24 @@ public class NetworkUniqueCodrEndpointRunner extends AbstractNetworkRunner {
 	}
 
 	public void doRun() throws WinDivertException {
-		packet = getWd().recv();
-		synchronized (lock) {
-			CodrEndpoint codr = factory.createCodrEndpoint(packet);
-			if (!uniqueEntities.add(codr)) {
-				uniqueEntities.parallelStream().forEach(x -> {
-					if (x.equals(codr)) {
-						x.setTimeLastChanged(codr.getTimeLastChanged());
-					}
-				});
+		try {
+			packet = getWd().recv();
+			synchronized (lock) {
+				CodrEndpoint codr = factory.createCodrEndpoint(packet);
+				if (!uniqueEntities.add(codr)) {
+					uniqueEntities.parallelStream().forEach(x -> {
+						if (x.equals(codr)) {
+							x.setTimeLastChanged(codr.getTimeLastChanged());
+						}
+					});
+				}
 			}
-		}
 
-		getWd().send(packet);
+			getWd().send(packet);
+		} catch (Exception e) {
+			getWd().close();
+			throw e;
+		}
 	}
 
 	public Set<CodrEndpoint> getUniqueEntities() {

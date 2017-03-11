@@ -27,14 +27,14 @@ public class UniqueCodrEndpointController {
 	private CodrEndpointFactory factory;
 	private NetworkUniqueCodrEndpointRunner runner;
 	private ExecutorService executor;
+	private WinDivert wd;
 
 	@RequestMapping("/api/uniqueCodrs")
 	// @JsonDeserialize(using = LocalDateTimeDeserializer.class)
 	public Set<CodrEndpoint> getCurrentUniqueCodrEndpoints() {
 		if (runner == null) {
 			runner = new NetworkUniqueCodrEndpointRunner(factory);
-			// TODO set wd not hard coded
-			final WinDivert wd = new WinDivert(" not icmp ");
+			wd = new WinDivert(" not icmp ");
 			runner.setWd(wd);
 			runner.init();
 			try {
@@ -50,11 +50,21 @@ public class UniqueCodrEndpointController {
 		return runner.getUniqueEntities();
 	}
 
+	@RequestMapping("/api/uniqueCodrsShutdown")
+	public String shutdown() {
+		onExit();
+		runner = null;
+		return "shutdown";
+	}
+
 	@PreDestroy
 	public void onExit() {
 		if (runner != null) {
 			executor.shutdownNow();
 			runner.getWd().close();
+			if (wd != null) {
+				wd.close();
+			}
 		}
 	}
 }
