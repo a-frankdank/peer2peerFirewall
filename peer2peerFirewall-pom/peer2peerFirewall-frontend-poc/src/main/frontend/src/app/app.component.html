@@ -1,43 +1,60 @@
 <h1>Your Public Ip: {{publicIp}}</h1>
 <h1>Here comes the greeting</h1>
-<div>
-	<label>greeting.id: </label>
+<div *ngIf="selectedGreeting">
 	<div>
-		<em>{{greeting?.id}}</em>
+		<label>greeting.id: </label>
+		<div>
+			<em>{{selectedGreeting?.id}}</em>
+		</div>
+		<div>
+			<input [(ngModel)]="selectedGreeting.id" placeholder="id">
+		</div>
 	</div>
 	<div>
-		<input [(ngModel)]="greeting.id" placeholder="id">
-	</div>
-</div>
-<div>
-	<label>greeting.content: </label>
-	<div>
-		<em>{{greeting?.content}}</em>
-	</div>
-	<div>
-		<input [(ngModel)]="greeting.content" placeholder="content">
+		<label>greeting.content: </label>
+		<div>
+			<em>{{selectedGreeting?.content}}</em>
+		</div>
+		<div>
+			<input [(ngModel)]="selectedGreeting.content" placeholder="content">
+		</div>
 	</div>
 </div>
 <br />
 <br />
+<h1>All them greetings</h1>
+<ul class="heroes">
+	<li *ngFor="let greeting of greetings" [class.selected]="greeting === selectedGreeting" (click)="onSelect(greeting)"><span class="badge">{{greeting?.id}}</span> {{greeting?.content}}
+	</li>
+</ul>
+<br/>
+<br/>
 <h1>Networkstatus:</h1>
+<div *ngIf="selectedCodr" class="selectedCodr">
+	<span>{{selectedCodr?.srcAdress}}:{{selectedCodr?.srcPort}}</span>
+	<span>{{selectedCodr?.dstAdress}}:{{selectedCodr?.dstPort}}</span>
+	<span>{{selectedCodr?.timeLastChanged}}</span>
+</div>
+<table class="codr">
+	<tr *ngFor="let codr of codrs" [class.selectedCodr]="codr === selectedCodr" (click)="onSelectCodr(codr)">
+		<td>{{codr?.srcAdress}}:{{codr?.srcPort}}</td>
+		<td>{{codr?.dstAdress}}:{{codr?.dstPort}}</td>
+		<td>{{codr?.timeLastChanged}}</td>
+	</tr>
+</table>
+<!--
 <ul class="codrs">
-	<li *ngFor="let codr of codrs"><div
+	<li *ngFor="let codr of codrs"><div class="badge"
 			style="overflow: hidden; white-space: nowrap;">
 			<div>{{codr?.srcAdress}}:{{codr?.srcPort}}</div>
 			<div>{{codr?.dstAdress}}:{{codr?.dstPort}}</div>
 			<div>{{codr?.timeLastChanged}}</div>
-			<!--
+			
   | date:'yMMdd-HH:mm:ss' 
- -->
+ 
 
 		</div></li>
 </ul>
+-->
 <br />
 <br />
-
-<h1>All them greetings</h1>
-<ul class="greetings">
-	<li *ngFor="let greeting of greetings"><span class="badge">{{greeting?.id}}</span>
-		{{greeting?.content}}</li>
-</ul>

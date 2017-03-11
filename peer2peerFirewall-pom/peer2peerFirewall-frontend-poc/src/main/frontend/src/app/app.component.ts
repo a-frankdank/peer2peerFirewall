@@ -26,16 +26,25 @@ const GREETINGS: Greeting[] = [
 
 @Injectable()
 export class AppComponent {
-  greeting: Greeting = { id: "", content: "" };
+  selectedGreeting: Greeting;
   publicIp: string;
   greetings = GREETINGS;
   codrs: CodrEndpoint[];
+  selectedCodr: CodrEndpoint;
+
+onSelect(greeting: Greeting): void{
+  this.selectedGreeting = greeting;
+}
+
+onSelectCodr(codr: CodrEndpoint): void{
+  this.selectedCodr = codr;
+}
 
   constructor(http: Http) {
-    http.get('/api/resource')
-      .map(r => r.json())
-      .catch(this.handleError)
-      .subscribe(greeting => this.greeting = greeting);
+  //   http.get('/api/resource')
+  //     .map(r => r.json())
+  //     .catch(this.handleError)
+  //     .subscribe(greeting => this.greeting = greeting);
     // TODO make greeting into CodrEndpoint...
 
     http.get('/api/uniqueCodrs')
