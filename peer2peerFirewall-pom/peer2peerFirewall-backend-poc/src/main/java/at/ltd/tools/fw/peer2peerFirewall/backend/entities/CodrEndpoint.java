@@ -15,6 +15,10 @@ public class CodrEndpoint {
 	private Integer dstPort;
 	// end of 'should be in comparator'
 	private LocalDateTime timeLastChanged;
+	// TODO fill those elements correctly
+	private String label;
+	private String ipCountryImage;
+	private String correspondingExe;
 
 	public CodrEndpoint() {
 		// nothing

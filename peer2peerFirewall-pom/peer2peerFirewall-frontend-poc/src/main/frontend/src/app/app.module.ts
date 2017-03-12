@@ -5,9 +5,16 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 
+import { GreetingDetailComponent } from './greeting-detail.component';
+import { CodrEndpointDetailComponent } from './codr-endpoint-detail.component';
+import { IpDetailComponent } from './ip-detail.component';
+
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    GreetingDetailComponent,
+    CodrEndpointDetailComponent,
+    IpDetailComponent
   ],
   imports: [
     BrowserModule,

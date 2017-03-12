@@ -1,27 +1,7 @@
-<h1>Your Public Ip: {{publicIp}}</h1>
-<h1>Here comes the greeting</h1>
-<div *ngIf="selectedGreeting">
-	<div>
-		<label>greeting.id: </label>
-		<div>
-			<em>{{selectedGreeting?.id}}</em>
-		</div>
-		<div>
-			<input [(ngModel)]="selectedGreeting.id" placeholder="id">
-		</div>
-	</div>
-	<div>
-		<label>greeting.content: </label>
-		<div>
-			<em>{{selectedGreeting?.content}}</em>
-		</div>
-		<div>
-			<input [(ngModel)]="selectedGreeting.content" placeholder="content">
-		</div>
-	</div>
-</div>
+<my-ip-detail [ip]="publicIp"></my-ip-detail>
 <br />
 <br />
+<my-greeting-detail [greeting]="selectedGreeting"></my-greeting-detail>
 <h1>All them greetings</h1>
 <ul class="heroes">
 	<li *ngFor="let greeting of greetings" [class.selected]="greeting === selectedGreeting" (click)="onSelect(greeting)"><span class="badge">{{greeting?.id}}</span> {{greeting?.content}}
@@ -30,31 +10,19 @@
 <br/>
 <br/>
 <h1>Networkstatus:</h1>
-<div *ngIf="selectedCodr" class="selectedCodr">
-	<span>{{selectedCodr?.srcAdress}}:{{selectedCodr?.srcPort}}</span>
-	<span>{{selectedCodr?.dstAdress}}:{{selectedCodr?.dstPort}}</span>
-	<span>{{selectedCodr?.timeLastChanged}}</span>
-</div>
+<my-codr-endpoint-detail [codrEndpoint]="selectedCodr"></my-codr-endpoint-detail>
+<!-- TODO: bring list into own component ! -->
 <table class="codr">
 	<tr *ngFor="let codr of codrs" [class.selectedCodr]="codr === selectedCodr" (click)="onSelectCodr(codr)">
 		<td>{{codr?.srcAdress}}:{{codr?.srcPort}}</td>
 		<td>{{codr?.dstAdress}}:{{codr?.dstPort}}</td>
-		<td>{{codr?.timeLastChanged}}</td>
+		<td>{{codr?.timeLastChanged | date:'yMMdd-HH:mm:ss' }}</td>
+		<td>{{codr?.label}}</td>
 	</tr>
 </table>
 <!--
-<ul class="codrs">
-	<li *ngFor="let codr of codrs"><div class="badge"
-			style="overflow: hidden; white-space: nowrap;">
-			<div>{{codr?.srcAdress}}:{{codr?.srcPort}}</div>
-			<div>{{codr?.dstAdress}}:{{codr?.dstPort}}</div>
-			<div>{{codr?.timeLastChanged}}</div>
-			
+date pretty-print:		
   | date:'yMMdd-HH:mm:ss' 
- 
-
-		</div></li>
-</ul>
 -->
 <br />
 <br />

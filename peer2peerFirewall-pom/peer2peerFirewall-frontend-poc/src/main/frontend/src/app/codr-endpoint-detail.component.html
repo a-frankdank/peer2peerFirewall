@@ -1,0 +1,6 @@
+<div *ngIf="codrEndpoint" class="selectedCodr">
+	<span>{{codrEndpoint?.srcAdress}}:{{codrEndpoint?.srcPort}}</span>
+	<span>{{codrEndpoint?.dstAdress}}:{{codrEndpoint?.dstPort}}</span>
+	<span>{{codrEndpoint?.timeLastChanged | date:'yMMdd-HH:mm:ss' }}</span>
+	<input [(ngModel)]="codrEndpoint.label" placeholer="label" />
+</div>
