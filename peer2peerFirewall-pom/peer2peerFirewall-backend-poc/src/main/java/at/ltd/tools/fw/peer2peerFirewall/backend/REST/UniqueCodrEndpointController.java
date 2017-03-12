@@ -30,8 +30,8 @@ public class UniqueCodrEndpointController {
 	private WinDivert wd;
 
 	@RequestMapping("/api/uniqueCodrs")
-	// @JsonDeserialize(using = LocalDateTimeDeserializer.class)
 	public Set<CodrEndpoint> getCurrentUniqueCodrEndpoints() {
+		logger.debug("called getCurrentUniqueCodrEndpoints");
 		if (runner == null) {
 			runner = new NetworkUniqueCodrEndpointRunner(factory);
 			wd = new WinDivert(" not icmp ");
@@ -40,18 +40,17 @@ public class UniqueCodrEndpointController {
 			try {
 				wd.open();
 			} catch (WinDivertException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.fatal("Windivert said:" + e.getStackTrace());
 			}
 			executor = Executors.newSingleThreadExecutor();
 			executor.execute(runner);
 		}
-		logger.debug("before getUniqueEntities");
 		return runner.getUniqueEntities();
 	}
 
 	@RequestMapping("/api/uniqueCodrsShutdown")
 	public String shutdown() {
+		logger.debug("shutdown called");
 		onExit();
 		runner = null;
 		return "shutdown";
@@ -59,7 +58,9 @@ public class UniqueCodrEndpointController {
 
 	@PreDestroy
 	public void onExit() {
+		logger.debug("onExit called");
 		if (runner != null) {
+			runner.interrupt();
 			executor.shutdownNow();
 			runner.getWd().close();
 			if (wd != null) {
