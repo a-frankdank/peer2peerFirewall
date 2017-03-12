@@ -12,3 +12,9 @@ famfamfam_flag_icons.zip
 
 https://www.ipify.org/
 for public ip
+
+http://www.nirsoft.net/utils/cports.html
+CurrPorts v2.31 - Monitoring Opened TCP/IP network ports / connections
+Copyright (c) 2004 - 2017 Nir Sofer 
+for netstat like 'show what connections and sockets are open'
+CLI: ./cports.exe   /DisabledFilters   /sxml ,,\sxml.xml /sort 1 /sort 5 /sort 8
