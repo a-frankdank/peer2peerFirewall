@@ -1,5 +1,5 @@
 export class Greeting {
-    public id: string;
+    public id: number;
     public content: string;
 }
 

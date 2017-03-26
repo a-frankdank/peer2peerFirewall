@@ -1,0 +1,12 @@
+<h2>All them greetings</h2>
+<ul class="heroes">
+	<li *ngFor="let greeting of greetings" [class.selected]="greeting === selectedGreeting" (click)="onSelect(greeting)">
+		<span class="badge">{{greeting?.id}}</span> {{greeting?.content}}
+	</li>
+</ul>
+<div *ngIf="selectedGreeting">
+  <h2>
+    {{selectedGreeting.content | uppercase}} is my greeting
+  </h2>
+  <button (click)="gotoDetail()">View Details</button>
+</div>
