@@ -5,6 +5,8 @@ import { GreetingDetailComponent } from './greeting-detail.component';
 import { GreetingComponent } from './greeting.component';
 import { DashboardComponent } from './dashboard.component';
 
+import { CodrViewComponent } from './codr-view.component';
+
 const routes = [
   {
     path: '',
@@ -22,7 +24,11 @@ const routes = [
   {
     path: 'dashboard',
     component: DashboardComponent
-  },
+  }, 
+  {
+    path: 'codrs',
+    component: CodrViewComponent
+  }
 ];
 
 @NgModule({

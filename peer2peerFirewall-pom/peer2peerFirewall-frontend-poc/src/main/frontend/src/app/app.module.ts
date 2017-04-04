@@ -19,12 +19,20 @@ import { IpComponent } from './ip.component';
 
 import { DashboardComponent } from './dashboard.component';
 
+// Imports for loading & configuring the in-memory web api
+import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
+import { InMemoryDataService }  from './in-memory-data.service';
+
+
+import { CodrViewComponent } from './codr-view.component';
+
 
 @NgModule({
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
+    InMemoryWebApiModule.forRoot(InMemoryDataService),
     AppRoutingModule,
   ],
   declarations: [
@@ -35,7 +43,8 @@ import { DashboardComponent } from './dashboard.component';
     CodrEndpointComponent,
     IpDetailComponent,
     IpComponent,
-    DashboardComponent
+    DashboardComponent,
+    CodrViewComponent
   ],
   providers: [
     GreetingService,

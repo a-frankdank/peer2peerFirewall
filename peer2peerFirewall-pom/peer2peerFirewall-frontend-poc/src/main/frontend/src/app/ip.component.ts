@@ -21,8 +21,10 @@ export class IpComponent implements OnInit {
 ngOnInit(): void{
     this.publicIp = "<ip>";
     this.http.get('/api/publicIp')
+      .toPromise()
+      .then((res: Response) => this.publicIp = res.text())
       .catch(this.handleError)
-      .subscribe((res: Response) => this.publicIp = res.json().publicIp);
+      //.subscribe((res: Response) => this.publicIp = res.json().publicIp);
 }
 
   constructor(http: Http) {

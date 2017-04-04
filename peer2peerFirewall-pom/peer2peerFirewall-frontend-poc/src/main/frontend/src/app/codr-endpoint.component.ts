@@ -13,7 +13,7 @@ import { CodrEndpointService } from './codr-endpoint-service';
   selector: 'my-codr-endpoint',
   templateUrl: './codr-endpoint.component.html',
   styleUrls: ['./app.component.css'],
-  providers: [ CodrEndpointService ],
+  providers: [CodrEndpointService],
 })
 
 
@@ -23,24 +23,24 @@ export class CodrEndpointComponent implements OnInit {
   selectedCodr: CodrEndpoint;
   http: Http;
 
-ngOnInit(): void{
+  ngOnInit(): void {
     this.getCodrEndpoints();
-// works, but don't want that anymore
+    // works, but don't want that anymore
     // this.http.get('/api/uniqueCodrs')
     //   .map(r => r.json())
     //   .catch(this.handleError)
     //   .subscribe(codrs => this.codrs = codrs);
-}
+  }
 
-onSelectCodr(codr: CodrEndpoint): void{
-  this.selectedCodr = codr;
-}
+  onSelectCodr(codr: CodrEndpoint): void {
+    this.selectedCodr = codr;
+  }
 
-getCodrEndpoints(): void{
-  this.codrs = this.codrEndpointService.getCodrEndpoints();
-}
+  getCodrEndpoints(): void {
+    this.codrEndpointService.getCodrEndpoints().then(codrs => this.codrs = codrs);
+  }
 
-  constructor(private codrEndpointService: CodrEndpointService,  http: Http) {
+  constructor(private codrEndpointService: CodrEndpointService, http: Http) {
     this.codrEndpointService = codrEndpointService;
     this.http = http;
   }
