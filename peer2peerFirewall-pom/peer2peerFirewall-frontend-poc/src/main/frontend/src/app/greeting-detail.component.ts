@@ -34,4 +34,9 @@ export class GreetingDetailComponent implements OnInit {
         this.location.back();
     }
 
+    save(): void {
+        this.greetingService.update(this.greeting)
+            .then(() => this.goBack());
+    }
+
 }

@@ -12,7 +12,7 @@ import { CodrEndpointService } from './codr-endpoint-service';
 @Component({
   selector: 'my-codr-endpoint',
   templateUrl: './codr-endpoint.component.html',
-  styleUrls: ['./app.component.css'],
+  styleUrls: ['./codr.css'],
   providers: [CodrEndpointService],
 })
 

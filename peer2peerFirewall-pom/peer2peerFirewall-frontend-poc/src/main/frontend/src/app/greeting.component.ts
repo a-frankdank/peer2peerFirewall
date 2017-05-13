@@ -39,6 +39,25 @@ export class GreetingComponent implements OnInit {
     this.router.navigate(['/greetingDetail', this.selectedGreeting.id]);
   }
 
+  add(text: string): void {
+    text = text.trim();
+    if (!text) { return; }
+    this.greetingService.create(text)
+      .then(greeting => {
+        this.greetings.push(greeting);
+        this.selectedGreeting = null;
+      });
+  }
+
+  delete(greeting: Greeting): void {
+    this.greetingService
+      .delete(greeting.id)
+      .then(() => {
+        this.greetings = this.greetings.filter(h => h !== greeting);
+        if (this.selectedGreeting === greeting) { this.selectedGreeting = null; }
+      });
+  }
+
   constructor(private greetingService: GreetingService, private http: Http, private router: Router) {
   }
 }

@@ -3,13 +3,13 @@
     background-color: #CFD8DC !important;
     color: white;
   }
-  .heroes {
+  .greeting {
     margin: 0 0 2em 0;
     list-style-type: none;
     padding: 0;
     width: 15em;
   }
-  .heroes li {
+  .greeting li {
     cursor: pointer;
     position: relative;
     left: 0;
@@ -19,20 +19,20 @@
     height: 1.6em;
     border-radius: 4px;
   }
-  .heroes li.selected:hover {
+  .greeting li.selected:hover {
     background-color: #BBD8DC !important;
     color: white;
   }
-  .heroes li:hover {
+  .greeting li:hover {
     color: #607D8B;
     background-color: #DDD;
     left: .1em;
   }
-  .heroes .text {
+  .greeting .text {
     position: relative;
     top: -3px;
   }
-  .heroes .badge {
+  .greeting .badge {
     display: inline-block;
     font-size: small;
     color: white;
@@ -86,24 +86,12 @@ nav a.active {
 
 
 
-
-
-
-
-
-
-table.codr tr:nth-child(even) {
-    background-color: #eee;
+button.delete {
+  float:right;
+  margin-top: 2px;
+  margin-right: .8em;
+  background-color: gray !important;
+  color:white;
 }
-table.codr tr:nth-child(odd) {
-   background-color:#fff;
-}
-table.codr th {
-    background-color: aliceblue;
-}
-table.codr tr.selectedCodr, .selectedCodr {
-    background-color: burlywood;
-}
-table.codr tr.selectedCodr:hover {
-    background-color: coral;
-}
+
+

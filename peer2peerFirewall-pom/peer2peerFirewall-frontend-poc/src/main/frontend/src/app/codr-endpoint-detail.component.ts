@@ -4,7 +4,7 @@ import { CodrEndpoint } from "./codr-endpoint";
 @Component({
     selector: "my-codr-endpoint-detail",
       templateUrl: './codr-endpoint-detail.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./codr.css']
 })
 
 export class CodrEndpointDetailComponent {

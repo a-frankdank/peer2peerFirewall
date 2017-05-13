@@ -1,8 +1,15 @@
 <h2>All them greetings</h2>
-<ul class="heroes">
-	<li *ngFor="let greeting of greetings" [class.selected]="greeting === selectedGreeting" (click)="onSelect(greeting)">
-		<span class="badge">{{greeting?.id}}</span> {{greeting?.content}}
-	</li>
+<div>
+  <label>Greeting text:</label> <input #greetingText />
+  <button (click)="add(greetingText.value); greetingText.value=''">
+    Add
+  </button>
+</div>
+<ul class="greeting">
+  <li *ngFor="let greeting of greetings" [class.selected]="greeting === selectedGreeting" (click)="onSelect(greeting)">
+    <span class="badge">{{greeting?.id}}</span> {{greeting?.content}}
+    <button class="delete" (click)="delete(greeting); $event.stopPropagation()">x</button>
+  </li>
 </ul>
 <div *ngIf="selectedGreeting">
   <h2>

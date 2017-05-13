@@ -25,6 +25,7 @@ import { InMemoryDataService }  from './in-memory-data.service';
 
 
 import { CodrViewComponent } from './codr-view.component';
+import { GreetingSearchComponent } from './greeting-search/greeting-search.component';
 
 
 @NgModule({
@@ -44,7 +45,8 @@ import { CodrViewComponent } from './codr-view.component';
     IpDetailComponent,
     IpComponent,
     DashboardComponent,
-    CodrViewComponent
+    CodrViewComponent,
+    GreetingSearchComponent
   ],
   providers: [
     GreetingService,
