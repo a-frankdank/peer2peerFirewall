@@ -25,7 +25,7 @@ import { InMemoryDataService }  from './in-memory-data.service';
 
 
 import { CodrViewComponent } from './codr-view.component';
-import { GreetingSearchComponent } from './greeting-search/greeting-search.component';
+import { GreetingSearchComponent } from './greeting-search.component';
 
 
 @NgModule({
