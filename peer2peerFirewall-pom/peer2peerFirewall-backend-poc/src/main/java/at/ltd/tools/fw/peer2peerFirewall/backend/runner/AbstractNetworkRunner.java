@@ -63,7 +63,10 @@ public abstract class AbstractNetworkRunner implements Runnable {
 				        e);
 			}
 		}
+		shutdown();
 	}
+
+	protected abstract void shutdown();
 
 	public void close() {
 		try {

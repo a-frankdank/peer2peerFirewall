@@ -11,6 +11,8 @@ import at.ltd.tools.fw.peer2peerFirewall.backend.entities.CodrEndpoint;
 @Component
 public class CodrEndpointFactory {
 
+	private static Integer id = 0;
+
 	public CodrEndpoint createCodrEndpoint(Packet packet) {
 		CodrEndpoint tmp = new CodrEndpoint();
 
@@ -18,9 +20,20 @@ public class CodrEndpointFactory {
 		tmp.setDstPort(packet.getDstPort());
 		tmp.setSrcAdress(packet.getSrcAddr());
 		tmp.setSrcPort(packet.getSrcPort());
+
 		tmp.setTimeLastChanged(LocalDateTime.now());
+		tmp.setBlocked(Boolean.FALSE);
 
 		return tmp;
+	}
+
+	public void setIdIntoCodr(CodrEndpoint codr) {
+		id++;
+		codr.setId(new Integer(id));
+	}
+
+	public void resetId() {
+		id = 0;
 	}
 
 }

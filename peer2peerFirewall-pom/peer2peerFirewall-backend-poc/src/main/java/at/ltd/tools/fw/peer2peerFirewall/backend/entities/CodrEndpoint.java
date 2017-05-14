@@ -14,7 +14,9 @@ public class CodrEndpoint {
 	private String dstAdress;
 	private Integer dstPort;
 	// end of 'should be in comparator'
+	private Integer id;
 	private LocalDateTime timeLastChanged;
+	private Boolean blocked;
 	// TODO fill those elements correctly
 	private String label;
 	private String ipCountryImage;
@@ -122,5 +124,21 @@ public class CodrEndpoint {
 		} else if (!srcPort.equals(other.srcPort))
 			return false;
 		return true;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Boolean isBlocked() {
+		return blocked;
+	}
+
+	public void setBlocked(Boolean blocked) {
+		this.blocked = blocked;
 	}
 }

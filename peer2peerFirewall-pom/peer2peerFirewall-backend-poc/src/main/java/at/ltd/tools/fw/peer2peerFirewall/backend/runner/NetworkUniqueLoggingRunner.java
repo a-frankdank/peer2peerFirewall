@@ -43,4 +43,10 @@ public class NetworkUniqueLoggingRunner extends AbstractNetworkRunner {
 		getWd().send(packet);
 	}
 
+	@Override
+	protected void shutdown() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

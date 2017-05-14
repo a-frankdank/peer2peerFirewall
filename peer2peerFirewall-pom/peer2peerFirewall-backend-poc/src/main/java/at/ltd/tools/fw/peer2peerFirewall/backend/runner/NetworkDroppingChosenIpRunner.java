@@ -22,4 +22,10 @@ public class NetworkDroppingChosenIpRunner extends AbstractNetworkRunner {
 		}
 	}
 
+	@Override
+	protected void shutdown() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

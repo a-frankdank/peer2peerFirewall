@@ -47,4 +47,10 @@ public class NetworkLoggingRunner extends AbstractNetworkRunner {
 
 	}
 
+	@Override
+	protected void shutdown() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
