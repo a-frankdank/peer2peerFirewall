@@ -8,88 +8,42 @@ import subprocess
 
 from typing import Dict
 
+import atexit
+# import sys
 
-class Task:
-    """a transformed task list line"""
-    def __init__(self, description: str="", pid: str="", service_name: str=""):
-        self.description = description[1:-1]
-        if service_name != "\"Nicht zutreffend\"" and service_name != "":
-            self.description = description[1:-1] + "/" + service_name[1:-1]
-        self.pid = pid[1:-1]
-
-    @staticmethod
-    def init_tasks():
-        # receive csv of pid and their names, and services (if they have some)
-        try:
-            tasks_output = subprocess.check_output(['tasklist', '/svc', '/nh', '/fo', 'csv'])
-        except Exception:
-            raise ValueError("couldn't launch tasklist. exiting")
-
-        # print("output: "+output.decode("windows-1252"))
-        # eg
-        # "System Idle Process","0","Nicht zutreffend"
-        # "System","4","Nicht zutreffend"
-        tasks_lines = tasks_output.decode("windows-1252").split("\r\n")
-        tasks = {}
-        # packing task list result into tasks dictionary
-        for task_line in tasks_lines:
-            task_columns = task_line.split(",")
-            if len(task_columns) == 3:
-                task = Task(task_columns[0], task_columns[1], task_columns[2])
-                #print("task: "+task.pid + " "+task.description)
-                tasks[task.pid] = task
-
-        # print("paused till you type")
-        # input()
-
-        return tasks
+import psutil
 
 
-class Socket:
-    """the transformed netstat output enriched by Task information"""
-    def __init__(self, protocol: str="", local_address: str="", remote_address: str="", pid: str="",
-                 tasks: Dict[str, Task]=None):
-        self.protocol = protocol
+class ProcessConnections:
+    """the process and its connections as extracted from psutils"""
+    def __init__(self, process: str = "", local_address: str = "", remote_address: str = ""):
+        self.process = process
         self.local_address = local_address
         self.remote_address = remote_address
-        self.process_information = tasks.get(pid, Task("\"only pid:"+pid+"\"", "\""+pid+"\"")).description
 
     @staticmethod
-    def init_sockets(tasks: Dict[str, Task]=None):
-        # show all open ports and their corresponding pids
-        try:
-            socket_output = subprocess.check_output(['netstat', '-nao'])
-        except Exception:
-            raise ValueError("couldn't launch netstat. exiting")
-        # print("socket_output: "+socket_output.decode("windows-1252"))
-
-        socket_lines = socket_output.decode("windows-1252").split("\r\n")
-        sockets = {}
-        # the first three to four socket_lines contain rubbish...
-        for socket_line in socket_lines:
-            # print(socket_line)
-            socket_columns = socket_line.split()
-            if len(socket_columns) == 5:
-                # socket_output from fourth socket_line on:
-                #   Proto  Lokale Adresse         Remoteadresse          Status           PID
-                #   TCP    127.0.0.1:49695        127.0.0.1:49696        HERGESTELLT     8796
-                # print(socket_columns[0]+";"+socket_columns[1]+";"+socket_columns[2]+";"+socket_columns[4])
-                # results in:
-                # TCP;127.0.0.1:49695;127.0.0.1:49696;8796
-                socket = Socket(socket_columns[0], socket_columns[1], socket_columns[2], socket_columns[4], tasks)
-                sockets[socket.local_address] = socket
-                # print("socket: "+socket.protocol+" "+socket.local_address+" "
-                #      + socket.remote_address+" "+socket.process_information)
-
+    def read_process_connections():
+        inner_process_connections = {}
+        for pid in psutil.pids():
+            process = psutil.Process(pid)
+            process_string = str(process.pid)
+            if process.name():
+                process_string = process.name()
+            for connection in process.connections():
+                left_address = NetworkPacket.concat_address(str(connection.laddr.ip), str(connection.laddr.port))
+                right_address = ""
+                if connection.raddr:
+                    right_address = NetworkPacket.concat_address(str(connection.raddr.ip), str(connection.raddr.port))
+                inner_process_connections[left_address] = ProcessConnections(process_string, left_address, right_address)
         # print("paused till you type")
         # input()
 
-        return sockets
+        return inner_process_connections
 
 
 class NetworkPacket:
     """the network packet received or sent cross referenced with open sockets"""
-    def __init__(self, timestamp: datetime, packet_input: Packet=None, sockets: Dict[str, Socket]=None):
+    def __init__(self, timestamp: datetime, packet_input: Packet = None):
         self.direction = "OUT" if packet_input.is_outbound else "IN"
         self.type = "TCP" if packet_input.tcp else ("UDP" if packet_input.udp else "UNKNOWN")
         src_address = NetworkPacket.concat_address(packet_input.src_addr, packet_input.src_port)
@@ -102,33 +56,54 @@ class NetworkPacket:
             self.local_address = dst_address
             self.remote_address = src_address
         self.timestamp = timestamp.strftime("%H:%M:%S.%f")
-        self.socket = sockets.get(self.local_address, Socket("", self.local_address, "", "no pid", {}))
 
     @staticmethod
-    def concat_address(addr, port):
+    def concat_address(adr, port):
         tmp_port = str(port or "")
         if tmp_port == "":
-            return addr
+            return adr
         else:
-            return addr + ":" + tmp_port
+            return adr + ":" + tmp_port
 
 
-print("wiggerlover")
+def unregister(to_close):
+    try:
+        to_close.close()
+    except RuntimeError as e:
+        if str(e) != "WinDivert handle is not open.":
+            raise e
+    # sys.exit(0)
 
-the_tasks = Task.init_tasks()
-the_sockets = Socket.init_sockets(the_tasks)
 
-# loop so that all packets while this runs get analysed
-while True:
+print("start")
+
+first_time = True
+number = 0
+process_connections = {}
+try:
     # would send other packets too: we don't care for those
     with pydivert.WinDivert("tcp or udp") as w:
         for packet in w:
+            if first_time:
+                atexit.register(unregister, w)
+                first_time = False
+            if number < 1:
+                print("loaded")
+                process_connections = ProcessConnections.read_process_connections()
+                number = 25
+            number -= 1
             # print(packet)
-            networkPacket = NetworkPacket(datetime.datetime.now(), packet, the_sockets)
+            # TODO do we really want to print individual packets?
+            #      or rather a port overview with a packet received count...
+            networkPacket = NetworkPacket(datetime.datetime.now(), packet)
+            process_connection = process_connections.get(
+                networkPacket.local_address, ProcessConnections("no process found", "", "")
+            )
             print(
                 "packet: {:15s}  {:3s}/{:3s}  {:22s}  {:22s} {:30s}".format(
                     networkPacket.timestamp, networkPacket.type, networkPacket.direction, networkPacket.local_address,
-                    networkPacket.remote_address, networkPacket.socket.process_information)
+                    networkPacket.remote_address, process_connection.process+"/"+process_connection.remote_address)
             )
             w.send(packet)
-            break
+except KeyboardInterrupt:
+    print("shutting down")

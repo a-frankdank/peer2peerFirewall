@@ -1,0 +1,246 @@
+PS C:\eclipse\gitLokRep_peer2peerFirewall\peer2peerFirewallPython\venv\Scripts> .\python.exe ..\..\dings.py
+wiggerlover
+packet: 08:13:00.654388  TCP/IN   192.168.0.153:49484     205.185.216.10:80      Warframe.x64.exe
+packet: 08:13:00.980197  TCP/IN   192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:01.022173  TCP/OUT  192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:01.291324  TCP/IN   192.168.0.153:49484     205.185.216.10:80      Warframe.x64.exe
+packet: 08:13:01.538565  TCP/OUT  192.168.0.153:49493     192.168.0.1:80         only pid:no pid
+packet: 08:13:01.550542  TCP/IN   192.168.0.153:49493     192.168.0.1:80         only pid:no pid
+packet: 08:13:01.761159  TCP/IN   192.168.0.153:49493     192.168.0.1:80         only pid:no pid
+packet: 08:13:02.011519  TCP/IN   192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:02.054514  TCP/OUT  192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:02.250448  TCP/IN   192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:02.293412  TCP/OUT  192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:02.891070  TCP/IN   192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:02.933061  TCP/OUT  192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:03.530514  TCP/IN   192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:03.573431  TCP/OUT  192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:03.770318  TCP/IN   192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:03.813352  TCP/OUT  192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:04.010591  TCP/IN   192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:04.054509  TCP/OUT  192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:04.250414  TCP/IN   192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:04.294430  TCP/OUT  192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:04.490257  TCP/IN   192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:04.532236  TCP/OUT  192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:04.573269  TCP/OUT  192.168.0.153:49494     192.168.0.1:80         only pid:no pid
+packet: 08:13:04.579208  TCP/IN   192.168.0.153:49494     192.168.0.1:80         only pid:no pid
+packet: 08:13:04.592202  TCP/IN   192.168.0.153:49494     192.168.0.1:80         only pid:no pid
+packet: 08:13:04.731231  TCP/IN   192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:04.772302  TCP/OUT  192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:04.971380  TCP/IN   192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:05.013357  TCP/OUT  192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:05.552637  TCP/OUT  192.168.0.153:49484     205.185.216.10:80      Warframe.x64.exe
+packet: 08:13:05.635590  TCP/IN   192.168.0.153:49484     205.185.216.10:80      Warframe.x64.exe
+packet: 08:13:05.689615  TCP/IN   192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:05.732537  TCP/OUT  192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:06.202264  TCP/IN   192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:06.330192  TCP/IN   192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:06.372168  TCP/OUT  192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:06.414144  TCP/OUT  192.168.0.153:49495     192.168.0.1:80         only pid:no pid
+packet: 08:13:06.424137  TCP/IN   192.168.0.153:49495     192.168.0.1:80         only pid:no pid
+packet: 08:13:06.570944  TCP/IN   192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:06.611922  TCP/OUT  192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:06.740558  TCP/IN   192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:06.784587  TCP/OUT  192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:07.302392  TCP/OUT  192.168.0.153:65284     146.66.155.100:27021   Steam.exe
+packet: 08:13:07.398340  TCP/IN   192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:07.420323  TCP/IN   192.168.0.153:65284     146.66.155.100:27021   Steam.exe
+packet: 08:13:07.441312  TCP/OUT  192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:08.447761  TCP/OUT  192.168.0.153:49496     192.168.0.1:80         only pid:no pid
+packet: 08:13:08.461758  TCP/IN   192.168.0.153:49496     192.168.0.1:80         only pid:no pid
+packet: 08:13:08.650651  TCP/IN   192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:08.698129  TCP/IN   192.168.0.153:49496     192.168.0.1:80         only pid:no pid
+packet: 08:13:08.720150  TCP/IN   192.168.0.153:49491     188.165.250.175:443    firefox.exe
+packet: 08:13:08.756129  TCP/IN   192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:09.365782  TCP/IN   192.168.0.153:49461     104.37.182.3:443       cmdagent.exe/CmdAgent
+packet: 08:13:09.610641  TCP/IN   192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:10.484143  TCP/OUT  192.168.0.153:49497     192.168.0.1:80         only pid:no pid
+packet: 08:13:10.491137  TCP/IN   192.168.0.153:49497     192.168.0.1:80         only pid:no pid
+packet: 08:13:10.505130  TCP/OUT  192.168.0.153:49497     192.168.0.1:80         only pid:no pid
+packet: 08:13:11.230172  TCP/IN   192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:11.955242  TCP/OUT  127.0.0.1:49499         127.0.0.1:49498        only pid:no pid
+packet: 08:13:12.156127  TCP/OUT  127.0.0.1:49501         127.0.0.1:49500        only pid:no pid
+packet: 08:13:12.224089  TCP/OUT  127.0.0.1:63148         127.0.0.1:63147        firefox.exe
+packet: 08:13:12.358013  TCP/OUT  127.0.0.1:49503         127.0.0.1:49502        only pid:no pid
+packet: 08:13:12.517946  TCP/OUT  192.168.0.153:49504     192.168.0.1:80         only pid:no pid
+packet: 08:13:12.525944  TCP/OUT  127.0.0.1:63148         127.0.0.1:63147        firefox.exe
+packet: 08:13:12.731120  TCP/IN   192.168.0.153:49504     192.168.0.1:80         only pid:no pid
+packet: 08:13:12.739073  TCP/IN   192.168.0.153:49504     192.168.0.1:80         only pid:no pid
+packet: 08:13:12.957105  TCP/OUT  127.0.0.1:49498         127.0.0.1:49499        only pid:no pid
+packet: 08:13:13.126065  TCP/OUT  127.0.0.1:63148         127.0.0.1:63147        firefox.exe
+packet: 08:13:13.157047  TCP/OUT  127.0.0.1:49500         127.0.0.1:49501        only pid:no pid
+packet: 08:13:13.358595  TCP/OUT  127.0.0.1:49503         127.0.0.1:49502        only pid:no pid
+packet: 08:13:13.363560  TCP/OUT  127.0.0.1:49502         127.0.0.1:49503        only pid:no pid
+packet: 08:13:13.455503  TCP/OUT  127.0.0.1:63148         127.0.0.1:63147        firefox.exe
+packet: 08:13:13.513469  TCP/OUT  127.0.0.1:63148         127.0.0.1:63147        firefox.exe
+packet: 08:13:14.116972  TCP/OUT  127.0.0.1:63148         127.0.0.1:63147        firefox.exe
+packet: 08:13:14.326072  TCP/OUT  127.0.0.1:63148         127.0.0.1:63147        firefox.exe
+packet: 08:13:14.430502  TCP/IN   192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:14.526001  TCP/OUT  127.0.0.1:63148         127.0.0.1:63147        firefox.exe
+packet: 08:13:14.543992  TCP/OUT  192.168.0.153:49505     192.168.0.1:80         only pid:no pid
+packet: 08:13:14.551985  TCP/IN   192.168.0.153:49505     192.168.0.1:80         only pid:no pid
+packet: 08:13:14.558982  TCP/IN   192.168.0.153:49505     192.168.0.1:80         only pid:no pid
+packet: 08:13:14.586967  UDP/IN   192.168.0.153:49654     192.168.0.1:53         only pid:no pid
+packet: 08:13:14.614950  TCP/IN   192.168.0.153:49506     172.217.22.228:443     only pid:no pid
+packet: 08:13:14.653929  TCP/OUT  127.0.0.1:63148         127.0.0.1:63147        firefox.exe
+packet: 08:13:14.689908  TCP/IN   192.168.0.153:49507     172.217.22.228:443     only pid:no pid
+packet: 08:13:14.722890  TCP/IN   192.168.0.153:49507     172.217.22.228:443     only pid:no pid
+packet: 08:13:14.750872  TCP/OUT  127.0.0.1:63148         127.0.0.1:63147        firefox.exe
+packet: 08:13:14.779857  TCP/IN   192.168.0.153:49508     172.217.22.228:443     only pid:no pid
+packet: 08:13:14.812841  TCP/IN   192.168.0.153:49508     172.217.22.228:443     only pid:no pid
+packet: 08:13:14.836825  TCP/OUT  127.0.0.1:63148         127.0.0.1:63147        firefox.exe
+packet: 08:13:14.873802  TCP/IN   192.168.0.153:49508     172.217.22.228:443     only pid:no pid
+packet: 08:13:14.916780  TCP/IN   192.168.0.153:49506     172.217.22.228:443     only pid:no pid
+packet: 08:13:14.938764  TCP/IN   192.168.0.153:49508     172.217.22.228:443     only pid:no pid
+packet: 08:13:14.948759  TCP/OUT  127.0.0.1:63148         127.0.0.1:63147        firefox.exe
+packet: 08:13:14.957754  TCP/OUT  127.0.0.1:49498         127.0.0.1:49499        only pid:no pid
+packet: 08:13:14.993734  TCP/OUT  127.0.0.1:63148         127.0.0.1:63147        firefox.exe
+packet: 08:13:15.064693  TCP/OUT  127.0.0.1:63148         127.0.0.1:63147        firefox.exe
+packet: 08:13:15.140650  TCP/OUT  127.0.0.1:63148         127.0.0.1:63147        firefox.exe
+packet: 08:13:15.158655  TCP/OUT  127.0.0.1:49500         127.0.0.1:49501        only pid:no pid
+packet: 08:13:15.363568  TCP/OUT  127.0.0.1:49502         127.0.0.1:49503        only pid:no pid
+packet: 08:13:15.388568  TCP/IN   192.168.0.153:49509     172.217.22.228:443     only pid:no pid
+packet: 08:13:15.691043  TCP/IN   192.168.0.153:49509     172.217.22.228:443     only pid:no pid
+packet: 08:13:16.575354  TCP/OUT  192.168.0.153:49510     192.168.0.1:80         only pid:no pid
+packet: 08:13:16.582350  TCP/IN   192.168.0.153:49510     192.168.0.1:80         only pid:no pid
+packet: 08:13:16.586347  TCP/OUT  192.168.0.153:49510     192.168.0.1:80         only pid:no pid
+packet: 08:13:16.970511  TCP/IN   192.168.0.153:49506     172.217.22.228:443     only pid:no pid
+packet: 08:13:17.688470  TCP/IN   192.168.0.153:49509     172.217.22.228:443     only pid:no pid
+packet: 08:13:18.608938  TCP/OUT  192.168.0.153:49511     192.168.0.1:80         only pid:no pid
+packet: 08:13:18.615940  TCP/IN   192.168.0.153:49511     192.168.0.1:80         only pid:no pid
+packet: 08:13:18.820817  TCP/IN   192.168.0.153:49511     192.168.0.1:80         only pid:no pid
+packet: 08:13:18.829811  TCP/IN   192.168.0.153:49511     192.168.0.1:80         only pid:no pid
+packet: 08:13:18.957794  TCP/OUT  127.0.0.1:49498         127.0.0.1:49499        only pid:no pid
+packet: 08:13:19.158681  TCP/OUT  127.0.0.1:49500         127.0.0.1:49501        only pid:no pid
+packet: 08:13:19.364564  TCP/OUT  127.0.0.1:49502         127.0.0.1:49503        only pid:no pid
+packet: 08:13:20.636607  TCP/OUT  192.168.0.153:49512     192.168.0.1:80         only pid:no pid
+packet: 08:13:20.643608  TCP/IN   192.168.0.153:49512     192.168.0.1:80         only pid:no pid
+packet: 08:13:20.830843  TCP/IN   192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:20.850830  TCP/IN   192.168.0.153:49512     192.168.0.1:80         only pid:no pid
+packet: 08:13:20.856831  TCP/IN   192.168.0.153:49512     192.168.0.1:80         only pid:no pid
+packet: 08:13:20.915793  TCP/IN   192.168.0.153:49506     172.217.22.228:443     only pid:no pid
+packet: 08:13:21.770303  TCP/IN   192.168.0.153:49509     172.217.22.228:443     only pid:no pid
+packet: 08:13:22.666930  TCP/OUT  192.168.0.153:49513     192.168.0.1:80         only pid:no pid
+packet: 08:13:22.680916  TCP/IN   192.168.0.153:49513     192.168.0.1:80         only pid:no pid
+packet: 08:13:22.890798  TCP/IN   192.168.0.153:49513     192.168.0.1:80         only pid:no pid
+packet: 08:13:24.359534  TCP/IN   192.168.0.153:49461     104.37.182.3:443       cmdagent.exe/CmdAgent
+packet: 08:13:24.457434  TCP/IN   192.168.0.153:49461     104.37.182.3:443       cmdagent.exe/CmdAgent
+packet: 08:13:24.699298  TCP/OUT  192.168.0.153:49514     192.168.0.1:80         only pid:no pid
+packet: 08:13:24.709291  TCP/IN   192.168.0.153:49514     192.168.0.1:80         only pid:no pid
+packet: 08:13:24.910242  TCP/IN   192.168.0.153:49514     192.168.0.1:80         only pid:no pid
+packet: 08:13:25.291575  TCP/IN   192.168.0.153:49461     104.37.182.3:443       cmdagent.exe/CmdAgent
+packet: 08:13:26.006038  TCP/IN   192.168.0.153:49461     104.37.182.3:443       cmdagent.exe/CmdAgent
+packet: 08:13:26.735622  TCP/OUT  192.168.0.153:49515     192.168.0.1:80         only pid:no pid
+packet: 08:13:26.750614  TCP/IN   192.168.0.153:49515     192.168.0.1:80         only pid:no pid
+packet: 08:13:26.950499  TCP/IN   192.168.0.153:49515     192.168.0.1:80         only pid:no pid
+packet: 08:13:27.160379  TCP/OUT  127.0.0.1:49500         127.0.0.1:49501        only pid:no pid
+packet: 08:13:27.366261  TCP/OUT  127.0.0.1:49502         127.0.0.1:49503        only pid:no pid
+packet: 08:13:28.192496  TCP/IN   192.168.0.153:49461     104.37.182.3:443       cmdagent.exe/CmdAgent
+packet: 08:13:28.761215  TCP/OUT  192.168.0.153:49516     192.168.0.1:80         only pid:no pid
+packet: 08:13:29.637161  TCP/IN   192.168.0.153:49516     192.168.0.1:80         only pid:no pid
+packet: 08:13:29.840947  TCP/IN   192.168.0.153:49516     192.168.0.1:80         only pid:no pid
+packet: 08:13:31.604600  TCP/OUT  192.168.0.153:49517     192.168.0.1:80         only pid:no pid
+packet: 08:13:31.616579  TCP/IN   192.168.0.153:49517     192.168.0.1:80         only pid:no pid
+packet: 08:13:31.820565  TCP/IN   192.168.0.153:49517     192.168.0.1:80         only pid:no pid
+packet: 08:13:32.357330  TCP/IN   192.168.0.153:49461     104.37.182.3:443       cmdagent.exe/CmdAgent
+packet: 08:13:33.160398  TCP/OUT  127.0.0.1:49500         127.0.0.1:49501        only pid:no pid
+packet: 08:13:33.367311  TCP/OUT  127.0.0.1:49502         127.0.0.1:49503        only pid:no pid
+packet: 08:13:33.610249  TCP/IN   192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:33.642232  TCP/OUT  192.168.0.153:49518     192.168.0.1:80         only pid:no pid
+packet: 08:13:33.647227  TCP/IN   192.168.0.153:49518     192.168.0.1:80         only pid:no pid
+packet: 08:13:33.850153  TCP/IN   192.168.0.153:49518     192.168.0.1:80         only pid:no pid
+packet: 08:13:34.369557  TCP/OUT  192.168.0.153:65284     146.66.155.100:27021   Steam.exe
+packet: 08:13:34.479493  TCP/IN   192.168.0.153:65284     146.66.155.100:27021   Steam.exe
+packet: 08:13:35.668304  TCP/OUT  192.168.0.153:49519     192.168.0.1:80         only pid:no pid
+packet: 08:13:35.675327  TCP/IN   192.168.0.153:49519     192.168.0.1:80         only pid:no pid
+packet: 08:13:35.880184  TCP/IN   192.168.0.153:49519     192.168.0.1:80         only pid:no pid
+packet: 08:13:37.687415  UDP/OUT  192.168.0.153:4950      165.227.164.4:4950     only pid:no pid
+packet: 08:13:37.707404  TCP/OUT  192.168.0.153:49520     192.168.0.1:80         only pid:no pid
+packet: 08:13:37.714399  TCP/IN   192.168.0.153:49520     192.168.0.1:80         only pid:no pid
+packet: 08:13:37.727391  TCP/IN   192.168.0.153:49520     192.168.0.1:80         only pid:no pid
+packet: 08:13:37.799350  UDP/IN   192.168.0.153:4950      165.227.164.4:4950     only pid:no pid
+packet: 08:13:39.738212  TCP/OUT  192.168.0.153:49521     192.168.0.1:80         only pid:no pid
+packet: 08:13:39.753206  TCP/IN   192.168.0.153:49521     192.168.0.1:80         only pid:no pid
+packet: 08:13:39.951091  TCP/IN   192.168.0.153:49521     192.168.0.1:80         only pid:no pid
+packet: 08:13:39.956087  TCP/IN   192.168.0.153:49521     192.168.0.1:80         only pid:no pid
+packet: 08:13:40.673343  TCP/IN   192.168.0.153:49461     104.37.182.3:443       cmdagent.exe/CmdAgent
+packet: 08:13:41.765934  TCP/OUT  192.168.0.153:49522     192.168.0.1:80         only pid:no pid
+packet: 08:13:41.783924  TCP/OUT  192.168.0.153:49522     192.168.0.1:80         only pid:no pid
+packet: 08:13:42.428346  TCP/OUT  192.168.0.153:49477     23.6.127.185:443       Warframe.x64.exe
+packet: 08:13:42.519294  TCP/IN   192.168.0.153:49477     23.6.127.185:443       Warframe.x64.exe
+packet: 08:13:42.630273  TCP/IN   192.168.0.153:49477     23.6.127.185:443       Warframe.x64.exe
+packet: 08:13:42.674205  TCP/OUT  192.168.0.153:49477     23.6.127.185:443       Warframe.x64.exe
+packet: 08:13:43.796200  TCP/OUT  192.168.0.153:49523     192.168.0.1:80         only pid:no pid
+packet: 08:13:43.810189  TCP/IN   192.168.0.153:49523     192.168.0.1:80         only pid:no pid
+packet: 08:13:43.820189  TCP/IN   192.168.0.153:49523     192.168.0.1:80         only pid:no pid
+packet: 08:13:45.832551  TCP/OUT  192.168.0.153:49524     192.168.0.1:80         only pid:no pid
+packet: 08:13:45.839548  TCP/IN   192.168.0.153:49524     192.168.0.1:80         only pid:no pid
+packet: 08:13:47.854113  TCP/OUT  192.168.0.153:49525     192.168.0.1:80         only pid:no pid
+packet: 08:13:47.861110  TCP/IN   192.168.0.153:49525     192.168.0.1:80         only pid:no pid
+packet: 08:13:48.070686  TCP/IN   192.168.0.153:49525     192.168.0.1:80         only pid:no pid
+packet: 08:13:48.075666  TCP/OUT  192.168.0.153:49525     192.168.0.1:80         only pid:no pid
+packet: 08:13:49.894166  TCP/OUT  192.168.0.153:49526     192.168.0.1:80         only pid:no pid
+packet: 08:13:49.906159  TCP/IN   192.168.0.153:49526     192.168.0.1:80         only pid:no pid
+packet: 08:13:50.009100  TCP/OUT  192.168.0.153:49477     23.6.127.185:443       Warframe.x64.exe
+packet: 08:13:50.109745  TCP/IN   192.168.0.153:49477     23.6.127.185:443       Warframe.x64.exe
+packet: 08:13:50.114722  TCP/IN   192.168.0.153:49526     192.168.0.1:80         only pid:no pid
+packet: 08:13:50.258894  TCP/IN   192.168.0.153:49477     23.6.127.185:443       Warframe.x64.exe
+packet: 08:13:50.266873  TCP/IN   192.168.0.153:49477     23.6.127.185:443       Warframe.x64.exe
+packet: 08:13:50.272887  TCP/IN   192.168.0.153:49477     23.6.127.185:443       Warframe.x64.exe
+packet: 08:13:50.288873  TCP/IN   192.168.0.153:49477     23.6.127.185:443       Warframe.x64.exe
+packet: 08:13:50.298854  TCP/IN   192.168.0.153:49477     23.6.127.185:443       Warframe.x64.exe
+packet: 08:13:50.306853  TCP/IN   192.168.0.153:49477     23.6.127.185:443       Warframe.x64.exe
+packet: 08:13:50.570069  TCP/IN   192.168.0.153:49477     23.6.127.185:443       Warframe.x64.exe
+packet: 08:13:51.175725  UDP/OUT  192.168.0.153:4955      165.227.164.4:4950     only pid:no pid
+packet: 08:13:51.210703  TCP/IN   192.168.0.153:49477     23.6.127.185:443       Warframe.x64.exe
+packet: 08:13:51.242686  UDP/IN   192.168.0.153:4955      165.227.164.4:4950     only pid:no pid
+packet: 08:13:51.915304  TCP/OUT  192.168.0.153:49527     192.168.0.1:80         only pid:no pid
+packet: 08:13:51.930292  TCP/OUT  192.168.0.153:49527     192.168.0.1:80         only pid:no pid
+packet: 08:13:52.182150  TCP/IN   192.168.0.153:49477     23.6.127.185:443       Warframe.x64.exe
+packet: 08:13:52.489237  TCP/IN   192.168.0.153:49482     23.6.127.185:443       Warframe.x64.exe
+packet: 08:13:52.532214  TCP/OUT  192.168.0.153:49482     23.6.127.185:443       Warframe.x64.exe
+packet: 08:13:52.813311  TCP/IN   192.168.0.153:49482     23.6.127.185:443       Warframe.x64.exe
+packet: 08:13:53.130128  TCP/IN   192.168.0.153:49482     23.6.127.185:443       Warframe.x64.exe
+packet: 08:13:53.770430  TCP/IN   192.168.0.153:49482     23.6.127.185:443       Warframe.x64.exe
+packet: 08:13:53.946329  TCP/OUT  192.168.0.153:49528     192.168.0.1:80         only pid:no pid
+packet: 08:13:53.956324  TCP/IN   192.168.0.153:49528     192.168.0.1:80         only pid:no pid
+packet: 08:13:54.410667  TCP/IN   192.168.0.153:49477     23.6.127.185:443       Warframe.x64.exe
+packet: 08:13:55.981969  TCP/OUT  192.168.0.153:49529     192.168.0.1:80         only pid:no pid
+packet: 08:13:55.993961  TCP/IN   192.168.0.153:49529     192.168.0.1:80         only pid:no pid
+packet: 08:13:56.190850  TCP/IN   192.168.0.153:49529     192.168.0.1:80         only pid:no pid
+packet: 08:13:56.490677  TCP/IN   192.168.0.153:49461     104.37.182.3:443       cmdagent.exe/CmdAgent
+packet: 08:13:58.016508  TCP/OUT  192.168.0.153:49530     192.168.0.1:80         only pid:no pid
+packet: 08:13:58.028499  TCP/IN   192.168.0.153:49530     192.168.0.1:80         only pid:no pid
+packet: 08:13:58.230385  TCP/IN   192.168.0.153:49530     192.168.0.1:80         only pid:no pid
+packet: 08:13:58.242377  TCP/IN   192.168.0.153:49530     192.168.0.1:80         only pid:no pid
+packet: 08:13:58.270364  TCP/IN   192.168.0.153:49477     23.6.127.185:443       Warframe.x64.exe
+packet: 08:13:58.742778  TCP/OUT  192.168.0.153:49461     104.37.182.3:443       cmdagent.exe/CmdAgent
+packet: 08:13:58.809696  TCP/IN   192.168.0.153:49487     104.194.10.213:6698    Warframe.x64.exe
+packet: 08:13:58.838679  TCP/IN   192.168.0.153:49461     104.37.182.3:443       cmdagent.exe/CmdAgent
+packet: 08:14:00.038583  TCP/OUT  192.168.0.153:49531     192.168.0.1:80         only pid:no pid
+packet: 08:14:00.054574  TCP/IN   192.168.0.153:49531     192.168.0.1:80         only pid:no pid
+packet: 08:14:01.406186  UDP/OUT  192.168.0.153:4950      165.227.164.4:4950     only pid:no pid
+packet: 08:14:01.463206  TCP/OUT  192.168.0.153:65284     146.66.155.100:27021   Steam.exe
+packet: 08:14:01.478329  UDP/IN   192.168.0.153:4950      165.227.164.4:4950     only pid:no pid
+packet: 08:14:01.539304  TCP/IN   192.168.0.153:65284     146.66.155.100:27021   Steam.exe
+packet: 08:14:02.077191  TCP/OUT  192.168.0.153:49532     192.168.0.1:80         only pid:no pid
+packet: 08:14:02.084188  TCP/IN   192.168.0.153:49532     192.168.0.1:80         only pid:no pid
+packet: 08:14:02.290217  TCP/IN   192.168.0.153:49532     192.168.0.1:80         only pid:no pid
+packet: 08:14:02.296213  TCP/OUT  192.168.0.153:49532     192.168.0.1:80         only pid:no pid
+packet: 08:14:02.419146  UDP/OUT  192.168.0.153:4955      165.227.164.4:4950     only pid:no pid
+packet: 08:14:02.519088  UDP/IN   192.168.0.153:4955      165.227.164.4:4950     only pid:no pid
+packet: 08:14:03.809198  UDP/OUT  192.168.0.153:57489     192.168.0.1:53         only pid:no pid
+packet: 08:14:03.841180  UDP/OUT  192.168.0.153:57489     192.168.0.1:53         only pid:no pid
+packet: 08:14:03.867168  UDP/IN   192.168.0.153:57489     192.168.0.1:53         only pid:no pid
+packet: 08:14:04.111025  TCP/OUT  192.168.0.153:49533     192.168.0.1:80         only pid:no pid
+packet: 08:14:04.414111  TCP/OUT  192.168.0.153:49534     213.94.75.137:80       only pid:no pid
+packet: 08:14:04.482073  TCP/IN   192.168.0.153:49534     213.94.75.137:80       only pid:no pid
+packet: 08:14:04.501060  TCP/IN   192.168.0.153:49534     213.94.75.137:80       only pid:no pid
+packet: 08:14:04.516053  TCP/OUT  192.168.0.153:49534     213.94.75.137:80       only pid:no pid
+packet: 08:14:06.132914  TCP/OUT  192.168.0.153:49535     192.168.0.1:80         only pid:no pid
+packet: 08:14:06.216294  TCP/OUT  192.168.0.153:49535     192.168.0.1:80         only pid:no pid
+packet: 08:14:06.598113  TCP/IN   192.168.0.153:49477     23.6.127.185:443       Warframe.x64.exe
+packet: 08:14:08.168959  TCP/OUT  192.168.0.153:49536     192.168.0.1:80         only pid:no pid
+packet: 08:14:08.174950  TCP/IN   192.168.0.153:49536     192.168.0.1:80         only pid:no pid
+packet: 08:14:08.184952  TCP/OUT  192.168.0.153:49536     192.168.0.1:80         only pid:no pid
