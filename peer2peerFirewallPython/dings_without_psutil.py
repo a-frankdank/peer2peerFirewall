@@ -62,6 +62,14 @@ class Socket:
         # show all open ports and their corresponding pids
         try:
             socket_output = subprocess.check_output(['netstat', '-nao'])
+            # PS C:\eclipse\gitLokRep_peer2peerFirewall\peer2peerFirewallPython\venv\Scripts> netstat -nao
+            #
+            # Aktive Verbindungen
+            #
+            #   Proto  Lokale Adresse         Remoteadresse          Status           PID
+            #   TCP    0.0.0.0:135            0.0.0.0:0              ABHÖREN         1060
+            #   TCP    0.0.0.0:445            0.0.0.0:0              ABHÖREN         4
+            #   TCP    0.0.0.0:5040           0.0.0.0:0              ABHÖREN         5080
         except Exception:
             raise ValueError("couldn't launch netstat. exiting")
         # print("socket_output: "+socket_output.decode("windows-1252"))
