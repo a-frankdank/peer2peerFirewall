@@ -1,6 +1,4 @@
 # -*- coding: UTF-8 -*-
-from concurrent.futures.thread import ThreadPoolExecutor
-from typing import Dict
 
 import pydivert
 from pydivert import Packet
@@ -12,21 +10,16 @@ import atexit
 
 import psutil
 
-import threading
-import concurrent.futures
-import copy
-
 
 class ProcessConnection:
     """the process and one of its connections as extracted from psutils"""
 
     inner_process_connections = {}
-    inner_process_connections_lock = threading.Lock()
 
     checked = {}
     processes = {}
 
-    ns2 = None
+    pc_ns = time.time_ns()
 
     def __init__(self, process: str = "", local_address: str = ""):
         self.process = process
@@ -46,18 +39,14 @@ class ProcessConnection:
             # ...]
 
             process_string = ProcessConnection.processes.get(connection.pid, connection.pid)
-            # process_string = psutil.Process(connection.pid).name()
-            # if process_string is None:
-            #     process_string = connection.pid
 
             left_address = NetworkPacket.concat_address(connection.laddr.ip, connection.laddr.port)
 
-            with ProcessConnection.inner_process_connections_lock:
-                ProcessConnection.inner_process_connections[left_address] = \
-                    ProcessConnection(
-                        process_string,
-                        left_address
-                    )
+            ProcessConnection.inner_process_connections[left_address] = \
+                ProcessConnection(
+                    process_string,
+                    left_address
+                )
 
     @staticmethod
     def update_processes_cache():
@@ -77,23 +66,8 @@ class ProcessConnection:
     @staticmethod
     def read_process_connections():
         """returns a Dict[str, ProcessConnection]"""
-        with ProcessConnection.inner_process_connections_lock:
-            tmp_copy = copy.copy(ProcessConnection.inner_process_connections)
-        return tmp_copy
 
-    @staticmethod
-    def loop_assembly():
-        ns2 = time.time_ns()
-        delay_p_c = 20000000
-        # print("in loop_assembly")
-        try:
-            while True:
-                if time.time_ns() - ns2 > delay_p_c:
-                    ns2 = time.time_ns()
-                    # print("loaded")
-                    ProcessConnection.assemble_process_connections()
-        except KeyboardInterrupt:
-            print("shutting down")
+        return ProcessConnection.inner_process_connections
 
 
 class NetworkPacket:
@@ -133,9 +107,8 @@ class NetworkLine:
     process_connections = None
 
     network_lines = {}
-    network_lines_lock = threading.Lock()
 
-    ns = None
+    nl_ns = time.time_ns()
 
     def __init__(self, packet_input: NetworkPacket = None, count: int = 0):
         self.packet = packet_input
@@ -184,34 +157,20 @@ class NetworkLine:
             # delete after 3 minutes since the packet discriminator has been last seen
             if minutes_diff > 2:
                 # print("one less now")
-                with NetworkLine.network_lines_lock:
-                    del NetworkLine.network_lines[key]
+                del NetworkLine.network_lines[key]
             else:
                 if line.process is none_found:
                     line.renew_process()
                 line.print()
 
     @staticmethod
-    def add_line(network_packet):
+    def add_line(packet: Packet):
+        network_packet = NetworkPacket(datetime.datetime.now(), packet)
         network_line = NetworkLine.network_lines.get(network_packet.discriminator, None)
         if network_line is None:
-            with NetworkLine.network_lines_lock:
-                NetworkLine.network_lines[network_packet.discriminator] = NetworkLine(network_packet, 1)
+            NetworkLine.network_lines[network_packet.discriminator] = NetworkLine(network_packet, 1)
         else:
             network_line.update(network_packet)
-
-    @staticmethod
-    def print_loop():
-        ns = time.time_ns()
-        delay = 5000000000
-        # print("in print loop")
-        try:
-            while True:
-                if time.time_ns() - ns > delay:
-                    ns = time.time_ns()
-                    NetworkLine.print_all_lines()
-        except KeyboardInterrupt:
-            print("shutting down")
 
 
 def unregister(to_close):
@@ -224,19 +183,13 @@ def unregister(to_close):
     # sys.exit(0)
 
 
-def add_packet(packet: Packet):
-    network_packet = NetworkPacket(datetime.datetime.now(), packet)
-    NetworkLine.add_line(network_packet)
-
-
-def main_loop():
+def main_loop(win_divert_filter: str = "tcp or udp"):
+    print("filter: "+win_divert_filter)
     first_time = True
-    ProcessConnection.ns2 = time.time_ns()
-    NetworkLine.ns = time.time_ns()
     # print("in main_loop")
     try:
         # would send other packets too: we don't care for those
-        with pydivert.WinDivert("tcp or udp") as w:
+        with pydivert.WinDivert(win_divert_filter) as w:
             for packet in w:
                 try:
                     w.send(packet)
@@ -246,13 +199,13 @@ def main_loop():
                     atexit.register(unregister, w)
                     first_time = False
                 # print(packet)
-                if time.time_ns() - ProcessConnection.ns2 > 20000000:
-                    ProcessConnection.ns2 = time.time_ns()
+                if time.time_ns() - ProcessConnection.pc_ns > 20000000:
+                    ProcessConnection.pc_ns = time.time_ns()
                     ProcessConnection.assemble_process_connections()
-                if time.time_ns() - NetworkLine.ns > 5000000000:
-                    NetworkLine.ns = time.time_ns()
+                if time.time_ns() - NetworkLine.nl_ns > 5000000000:
+                    NetworkLine.nl_ns = time.time_ns()
                     NetworkLine.print_all_lines()
-                add_packet(packet)
+                NetworkLine.add_line(packet)
                 # print(
                 #     "packet: {:15s}  {:3s}/{:3s}  {:22s}  {:22s} {:30s}".format(
                 #         network_packet.timestamp, network_packet.type, network_packet.direction,
@@ -265,8 +218,12 @@ def main_loop():
 
 print("start")
 none_found = ProcessConnection("no process found", "")
-main_loop()
-# with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
-#    executor.submit(ProcessConnection.loop_assembly)
-#    executor.submit(main_loop, executor)
-#    executor.submit(NetworkLine.print_loop)
+print("wanna take input from tcp, or udp, or both? default: both")
+decision = input()
+if decision == "udp":
+    main_loop("udp")
+else:
+    if decision == "tcp":
+        main_loop("tcp")
+    else:
+        main_loop()
