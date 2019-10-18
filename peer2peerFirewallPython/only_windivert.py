@@ -4,6 +4,7 @@ import pydivert
 
 import atexit
 
+
 def unregister(to_close):
     try:
         print("unregistering")
@@ -18,18 +19,11 @@ def main_loop():
     first_time = True
     # print("in main_loop")
     try:
-
-# that alone slows your available bandwidth to half of its real possibility!
-#         Ping
-#         ms
-#         22
-#         Download
-#         Mbps
-#         10.59
-#         Upload
-#         Mbps
-#         5.18
-
+        # just using WinDivert alone slows your available bandwidth to half of its real possibility!
+        #         Ping ms 22
+        #         Download Mbps 10.59
+        #         Upload Mbps 5.18
+        # ----------------------------------------------------
         # would send other packets too: we don't care for those
         with pydivert.WinDivert("tcp or udp") as w:
             for packet in w:
