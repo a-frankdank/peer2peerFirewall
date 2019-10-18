@@ -1,4 +1,5 @@
 # -*- coding: UTF-8 -*-
+from typing import Dict, Callable
 
 import pydivert
 from pydivert import Packet
@@ -26,10 +27,19 @@ class ProcessConnection:
         self.local_address = local_address
 
     @staticmethod
-    def assemble_process_connections():
+    def clear():
+        ProcessConnection.inner_process_connections = {}
+
+        ProcessConnection.checked = {}
+        ProcessConnection.processes = {}
+
+        ProcessConnection.pc_ns = time.time_ns()
+
+    @staticmethod
+    def assemble_process_connections(every_loop_function: Callable[[None], None] = None):
         """assembles all ProcessConnections possible into inner_process_connections"""
 
-        ProcessConnection.update_processes_cache()
+        ProcessConnection.update_processes_cache(every_loop_function)
 
         for connection in psutil.net_connections():
             # [sconn(fd=115, family= < AddressFamily.AF_INET: 2 >, type = < SocketType.SOCK_STREAM: 1 >, laddr = addr(
@@ -37,6 +47,8 @@ class ProcessConnection:
             # sconn(fd=117, family= < AddressFamily.AF_INET: 2 >, type = < SocketType.SOCK_STREAM: 1 >, laddr = addr(
             #  ip='10.0.0.1', port=43761), raddr = addr(ip='72.14.234.100', port=80), status = 'CLOSING', pid = 2987),
             # ...]
+            if every_loop_function:
+                every_loop_function()
 
             process_string = ProcessConnection.processes.get(connection.pid, connection.pid)
 
@@ -49,10 +61,12 @@ class ProcessConnection:
                 )
 
     @staticmethod
-    def update_processes_cache():
+    def update_processes_cache(every_loop_function: Callable[[None], None] = None):
         """updates the process cache (id + name)"""
 
         for pid in psutil.pids():
+            if every_loop_function:
+                every_loop_function()
             try:
                 process = psutil.Process(pid)
                 key3 = str(pid) + "/" + str(process.create_time())
@@ -67,10 +81,8 @@ class ProcessConnection:
     def read_process_connections():
         """returns a Dict[str, ProcessConnection]"""
 
-        return ProcessConnection.inner_process_connections
+        return ProcessConnection.inner_process_connections.copy()
 
-
-none_found = ProcessConnection("no process found", "")
 
 class NetworkPacket:
     """the network packet received or sent cross referenced with open sockets"""
@@ -150,16 +162,26 @@ class NetworkLine:
         )
 
     @staticmethod
+    def clear():
+        NetworkLine.process_connections = None
+
+        NetworkLine.network_lines = {}
+
+        NetworkLine.nl_ns = time.time_ns()
+
+    @staticmethod
     def print_all_lines():
         print("")
         for line in list(NetworkLine.network_lines.values()):
             line.print()
 
     @staticmethod
-    def reduce_lines():
+    def reduce_lines(every_loop_function: Callable[[None], None] = None):
         now = datetime.datetime.now()
         new_lines = {}
         for line in NetworkLine.network_lines.values():
+            if every_loop_function:
+                every_loop_function()
             # time since line.packet was added until now, in minutes
             minutes_diff = (now - line.packet.timestamp).total_seconds() / 60.0
             # delete after 3 minutes since the packet discriminator has been last seen
@@ -179,66 +201,98 @@ class NetworkLine:
             network_line.update(network_packet)
 
 
-class Peer2PeerFirewall:
-    @staticmethod
-    def unregister(to_close):
-        try:
-            print("unregistering")
-            to_close.close()
-        except RuntimeError as e:
-            if str(e) != "WinDivert handle is not open.":
-                raise e
-        # sys.exit(0)
+none_found = ProcessConnection("no process found", "")
+stop_it = False
 
-    @staticmethod
-    def main_loop(win_divert_filter: str = "tcp or udp", do_print: bool = False):
-        print("filter: "+win_divert_filter)
-        first_time = True
-        # print("in main_loop")
-        try:
-            # would send other packets too: we don't care for those
-            with pydivert.WinDivert(win_divert_filter) as w:
-                for packet in w:
-                    try:
-                        w.send(packet)
-                    except OSError:
-                        pass
-                    if first_time:
-                        atexit.register(Peer2PeerFirewall.unregister, w)
-                        first_time = False
-                    # print(packet)
-                    if time.time_ns() - ProcessConnection.pc_ns > 20000000:
-                        ProcessConnection.pc_ns = time.time_ns()
-                        ProcessConnection.assemble_process_connections()
-                    if time.time_ns() - NetworkLine.nl_ns > 5000000000:
-                        NetworkLine.nl_ns = time.time_ns()
-                        NetworkLine.reduce_lines()
-                        if do_print:
-                            NetworkLine.print_all_lines()
-                    NetworkLine.add_line(packet)
-                    # print(
-                    #     "packet: {:15s}  {:3s}/{:3s}  {:22s}  {:22s} {:30s}".format(
-                    #         network_packet.timestamp, network_packet.type, network_packet.direction,
-                    #         network_packet.local_address,
-                    #         network_packet.remote_address, process_connection.process)
-                    # )
-        except KeyboardInterrupt:
-            print("shutting down")
 
-    @staticmethod
-    def console_start():
-        print("start")
+def read_network_lines() -> Dict[str, NetworkLine]:
+    """returns a Dict[str, NetworkLine]"""
 
-        print("wanna take input from tcp, or udp, or both? default: both")
-        decision = input()
-        if decision == "udp":
-            Peer2PeerFirewall.main_loop("udp", True)
-        else:
-            if decision == "tcp":
-                Peer2PeerFirewall.main_loop("tcp", True)
+    return NetworkLine.network_lines.copy()
+
+
+def unregister(to_close):
+    try:
+        print("unregistering")
+        to_close.close()
+    except RuntimeError as e:
+        if str(e) != "WinDivert handle is not open.":
+            raise e
+    # sys.exit(0)
+
+
+def stop():
+    global stop_it
+    stop_it = True
+
+
+def main_loop(
+        win_divert_filter: str = "tcp or udp",
+        do_print: bool = False,
+        every_loop_function: Callable[[None], None] = None,
+        just_print_function: Callable[[None], None] = None
+):
+    print("filter: " + win_divert_filter)
+    global stop_it
+    stop_it = False
+    first_time = True
+    # print("in main_loop")
+    try:
+        # would send other packets too: we don't care for those
+        divert = pydivert.WinDivert(win_divert_filter)
+        divert.open()
+        while stop_it is False:
+            packet = divert.recv()
+            if every_loop_function:
+                every_loop_function()
+            try:
+                divert.send(packet)
+            except OSError:
+                pass
+            if first_time:
+                atexit.register(unregister, divert)
+                first_time = False
+            if stop_it:
+                NetworkLine.clear()
+                ProcessConnection.clear()
+                break
             else:
-                Peer2PeerFirewall.main_loop(do_print=True)
+                # print(packet)
+                if time.time_ns() - ProcessConnection.pc_ns > 20000000:
+                    ProcessConnection.pc_ns = time.time_ns()
+                    ProcessConnection.assemble_process_connections(every_loop_function)
+                if time.time_ns() - NetworkLine.nl_ns > 5000000000:
+                    NetworkLine.nl_ns = time.time_ns()
+                    NetworkLine.reduce_lines(every_loop_function)
+                    if do_print:
+                        NetworkLine.print_all_lines()
+                    if just_print_function:
+                        just_print_function()
+                NetworkLine.add_line(packet)
+                # print(
+                #     "packet: {:15s}  {:3s}/{:3s}  {:22s}  {:22s} {:30s}".format(
+                #         network_packet.timestamp, network_packet.type, network_packet.direction,
+                #         network_packet.local_address,
+                #         network_packet.remote_address, process_connection.process)
+                # )
+        divert.close()
+        divert.unregister()
+    except KeyboardInterrupt:
+        print("shutting down")
+    except RuntimeError as e:
+        if str(e) != "WinDivert handle is not open.":
+            raise e
 
 
 if __name__ == '__main__':
-    Peer2PeerFirewall.console_start()
+    print("start")
+
+    print("wanna take input from tcp, or udp, or both? default: both")
+    decision = input()
+    if decision == "udp":
+        main_loop("udp", True)
+    else:
+        if decision == "tcp":
+            main_loop("tcp", True)
+        else:
+            main_loop(do_print=True)
