@@ -70,6 +70,8 @@ class ProcessConnection:
         return ProcessConnection.inner_process_connections
 
 
+none_found = ProcessConnection("no process found", "")
+
 class NetworkPacket:
     """the network packet received or sent cross referenced with open sockets"""
 
@@ -150,18 +152,22 @@ class NetworkLine:
     @staticmethod
     def print_all_lines():
         print("")
-        for key in list(NetworkLine.network_lines.keys()):
-            line = NetworkLine.network_lines[key]
+        for line in list(NetworkLine.network_lines.values()):
+            line.print()
+
+    @staticmethod
+    def reduce_lines():
+        now = datetime.datetime.now()
+        new_lines = {}
+        for line in NetworkLine.network_lines.values():
             # time since line.packet was added until now, in minutes
-            minutes_diff = (datetime.datetime.now() - line.packet.timestamp).total_seconds() / 60.0
+            minutes_diff = (now - line.packet.timestamp).total_seconds() / 60.0
             # delete after 3 minutes since the packet discriminator has been last seen
-            if minutes_diff > 2:
-                # print("one less now")
-                del NetworkLine.network_lines[key]
-            else:
+            if minutes_diff < 2:
                 if line.process is none_found:
                     line.renew_process()
-                line.print()
+                new_lines[line.packet.discriminator] = line
+        NetworkLine.network_lines = new_lines
 
     @staticmethod
     def add_line(packet: Packet):
@@ -173,57 +179,66 @@ class NetworkLine:
             network_line.update(network_packet)
 
 
-def unregister(to_close):
-    try:
-        print("unregistering")
-        to_close.close()
-    except RuntimeError as e:
-        if str(e) != "WinDivert handle is not open.":
-            raise e
-    # sys.exit(0)
+class Peer2PeerFirewall:
+    @staticmethod
+    def unregister(to_close):
+        try:
+            print("unregistering")
+            to_close.close()
+        except RuntimeError as e:
+            if str(e) != "WinDivert handle is not open.":
+                raise e
+        # sys.exit(0)
+
+    @staticmethod
+    def main_loop(win_divert_filter: str = "tcp or udp", do_print: bool = False):
+        print("filter: "+win_divert_filter)
+        first_time = True
+        # print("in main_loop")
+        try:
+            # would send other packets too: we don't care for those
+            with pydivert.WinDivert(win_divert_filter) as w:
+                for packet in w:
+                    try:
+                        w.send(packet)
+                    except OSError:
+                        pass
+                    if first_time:
+                        atexit.register(Peer2PeerFirewall.unregister, w)
+                        first_time = False
+                    # print(packet)
+                    if time.time_ns() - ProcessConnection.pc_ns > 20000000:
+                        ProcessConnection.pc_ns = time.time_ns()
+                        ProcessConnection.assemble_process_connections()
+                    if time.time_ns() - NetworkLine.nl_ns > 5000000000:
+                        NetworkLine.nl_ns = time.time_ns()
+                        NetworkLine.reduce_lines()
+                        if do_print:
+                            NetworkLine.print_all_lines()
+                    NetworkLine.add_line(packet)
+                    # print(
+                    #     "packet: {:15s}  {:3s}/{:3s}  {:22s}  {:22s} {:30s}".format(
+                    #         network_packet.timestamp, network_packet.type, network_packet.direction,
+                    #         network_packet.local_address,
+                    #         network_packet.remote_address, process_connection.process)
+                    # )
+        except KeyboardInterrupt:
+            print("shutting down")
+
+    @staticmethod
+    def console_start():
+        print("start")
+
+        print("wanna take input from tcp, or udp, or both? default: both")
+        decision = input()
+        if decision == "udp":
+            Peer2PeerFirewall.main_loop("udp", True)
+        else:
+            if decision == "tcp":
+                Peer2PeerFirewall.main_loop("tcp", True)
+            else:
+                Peer2PeerFirewall.main_loop(do_print=True)
 
 
-def main_loop(win_divert_filter: str = "tcp or udp"):
-    print("filter: "+win_divert_filter)
-    first_time = True
-    # print("in main_loop")
-    try:
-        # would send other packets too: we don't care for those
-        with pydivert.WinDivert(win_divert_filter) as w:
-            for packet in w:
-                try:
-                    w.send(packet)
-                except OSError:
-                    pass
-                if first_time:
-                    atexit.register(unregister, w)
-                    first_time = False
-                # print(packet)
-                if time.time_ns() - ProcessConnection.pc_ns > 20000000:
-                    ProcessConnection.pc_ns = time.time_ns()
-                    ProcessConnection.assemble_process_connections()
-                if time.time_ns() - NetworkLine.nl_ns > 5000000000:
-                    NetworkLine.nl_ns = time.time_ns()
-                    NetworkLine.print_all_lines()
-                NetworkLine.add_line(packet)
-                # print(
-                #     "packet: {:15s}  {:3s}/{:3s}  {:22s}  {:22s} {:30s}".format(
-                #         network_packet.timestamp, network_packet.type, network_packet.direction,
-                #         network_packet.local_address,
-                #         network_packet.remote_address, process_connection.process)
-                # )
-    except KeyboardInterrupt:
-        print("shutting down")
-
-
-print("start")
-none_found = ProcessConnection("no process found", "")
-print("wanna take input from tcp, or udp, or both? default: both")
-decision = input()
-if decision == "udp":
-    main_loop("udp")
-else:
-    if decision == "tcp":
-        main_loop("tcp")
-    else:
-        main_loop()
+if __name__ == '__main__':
+    Peer2PeerFirewall.console_start()
