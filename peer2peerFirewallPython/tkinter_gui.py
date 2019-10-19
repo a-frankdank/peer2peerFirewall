@@ -13,6 +13,7 @@ class P2pGui(threading.Thread):
 
     root: tk.Tk
     tree_view: ttk.Treeview
+    # TODO do i need that... tree_view_lines: int
 
     on_or_off_button: ttk.Button
 
@@ -35,28 +36,31 @@ class P2pGui(threading.Thread):
             self.on_or_off_button["text"] = "on "
             self.on_or_off_button.configure(style="pG.TButton")
             self.combo_box.configure(state="disabled")
+            self.tree_view.insert(
+                "", 0, "startUp",
+                text=" ", values=("", "starting up...", "", "", "")
+            )
             self.start_up_p2pFw = True
 
     def update_tree_view(self):
         # TODO deleting and updating is way too slow!
+        #      and you loose selection etc too...
         for child in self.tree_view.get_children():
             self.tree_view.delete(child)
         network_lines = p2pFw.read_network_lines()
         i = 0
         for line in network_lines.values():
-            if i % 5 == 0:
-                self.root.update()
             self.tree_view.insert(
                 "", i, line.packet.discriminator,
                 text=line.packet.timestamp_text,
                 values=(
-                    line.packet.type + "/" + line.packet.direction,
+                    f'{line.packet.type}/{line.packet.direction}',
                     line.packet.local_address,
                     line.packet.remote_address,
                     line.process.process,
                     line.count
                 )
-             )
+            )
             i += 1
         # for i in range(0, 100):
         #     self.tree_view.insert(
