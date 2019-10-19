@@ -22,8 +22,9 @@ class ProcessConnection:
 
     pc_ns = time.time_ns()
 
-    def __init__(self, process: str = "", local_address: str = ""):
+    def __init__(self, process: str = "", pid: int = -1, local_address: str = ""):
         self.process = process
+        self.pid = pid
         self.local_address = local_address
 
     @staticmethod
@@ -55,6 +56,7 @@ class ProcessConnection:
             ProcessConnection.inner_process_connections[left_address] = \
                 ProcessConnection(
                     process_string,
+                    connection.pid,
                     left_address
                 )
 
@@ -65,7 +67,7 @@ class ProcessConnection:
         for pid in psutil.pids():
             try:
                 process = psutil.Process(pid)
-                key3 = str(pid) + "/" + str(process.create_time())
+                key3 = f'{pid}/{process.create_time()}'
                 if ProcessConnection.checked.get(key3, None) is None:
                     ProcessConnection.checked[key3] = 1
                     if process.name():
@@ -108,15 +110,15 @@ class NetworkPacket:
             self.remote_address = src_address
         self.timestamp_text = timestamp.strftime("%H:%M:%S.%f")
         self.timestamp = timestamp
-        self.discriminator = self.type + self.direction + self.local_address + self.remote_address
+        # self.discriminator = self.type + self.direction + self.local_address + self.remote_address
+        self.discriminator = f'{self.type}{self.direction}{self.local_address}{self.remote_address}'
 
     @staticmethod
     def concat_address(adr, port):
-        tmp_port = str(port or "")
-        if tmp_port == "":
+        if port is None:
             return adr
         else:
-            return adr + ":" + tmp_port
+            return f'{adr}:{port}'
 
 
 class NetworkLine:
@@ -204,7 +206,7 @@ class NetworkLine:
             network_line.update(network_packet)
 
 
-none_found = ProcessConnection("no process found", "")
+none_found = ProcessConnection("no process found", -1, "")
 stop_it = False
 
 
@@ -221,7 +223,6 @@ def unregister(to_close):
     except RuntimeError as e:
         if str(e) != "WinDivert handle is not open.":
             raise e
-    # sys.exit(0)
 
 
 def stop():
@@ -257,7 +258,7 @@ def main_loop(
                 break
             else:
                 # print(packet)
-                if time.time_ns() - ProcessConnection.pc_ns > 20000000:
+                if time.time_ns() - ProcessConnection.pc_ns > 19000000:
                     ProcessConnection.pc_ns = time.time_ns()
                     ProcessConnection.assemble_process_connections()
                 if time.time_ns() - NetworkLine.nl_ns > 5000000000:
