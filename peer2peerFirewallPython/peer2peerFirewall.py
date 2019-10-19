@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-from typing import Dict, Callable
+from typing import Dict
 
 import pydivert
 from pydivert import Packet
@@ -39,7 +39,6 @@ class ProcessConnection:
     def assemble_process_connections():
         """assembles all ProcessConnections possible into inner_process_connections"""
 
-        # TODO dont we want to add the service name to svchost?
         ProcessConnection.update_processes_cache()
 
         for connection in psutil.net_connections():
@@ -70,7 +69,16 @@ class ProcessConnection:
                 if ProcessConnection.checked.get(key3, None) is None:
                     ProcessConnection.checked[key3] = 1
                     if process.name():
-                        ProcessConnection.processes[pid] = process.name()
+                        if process.name() == "svchost.exe":
+                            service_names = [process.name()]
+                            for service in psutil.win_service_iter():
+                                if service.pid() == pid:
+                                    service_names.append(service.name())
+                            ProcessConnection.processes[pid] = "/".join(service_names)
+                        else:
+                            ProcessConnection.processes[pid] = process.name()
+                    else:
+                        ProcessConnection.processes[pid] = pid
             except psutil.NoSuchProcess:
                 pass
 
