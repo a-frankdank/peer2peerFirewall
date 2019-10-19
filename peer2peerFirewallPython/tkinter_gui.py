@@ -13,7 +13,6 @@ class P2pGui(threading.Thread):
 
     root: tk.Tk
     tree_view: ttk.Treeview
-    # TODO do i need that... tree_view_lines: int
 
     on_or_off_button: ttk.Button
 
@@ -22,6 +21,8 @@ class P2pGui(threading.Thread):
 
     keep_gui_looping = True
     start_up_p2pFw = False
+
+    network_lines: Dict[str, p2pFw.NetworkLine]
 
     def on_or_off(self):
         if self.on_or_off_button["text"] == "on ":
@@ -38,22 +39,52 @@ class P2pGui(threading.Thread):
             self.combo_box.configure(state="disabled")
             self.tree_view.insert(
                 "", 0, "startUp",
-                text=" ", values=("", "starting up...", "", "", "")
+                text=" ", values=("", "", "starting up...", "", "", "")
             )
+            self.network_lines["startUp"] = p2pFw.NetworkLine()
             self.start_up_p2pFw = True
 
     def update_tree_view(self):
-        # TODO deleting and updating is way too slow!
-        #      and you loose selection etc too...
-        for child in self.tree_view.get_children():
-            self.tree_view.delete(child)
-        network_lines = p2pFw.read_network_lines()
-        i = 0
-        for line in network_lines.values():
+        new_network_lines = p2pFw.read_network_lines()
+        # delete those not present anymore
+        if self.network_lines.keys() and new_network_lines.keys():
+            deleted_stuff = list({
+                key for key in self.network_lines.keys()
+                if key not in new_network_lines
+            })
+            for to_delete in deleted_stuff:
+                self.tree_view.delete(to_delete)
+
+        # TODO finish up
+        # edit those present
+        present_stuff = {
+            key: value for key, value in new_network_lines.items()
+            if key in self.network_lines
+        }
+        for key, line in present_stuff.items():
+            # what can change: ts, process, count
+            # columns = self.tree_view.set(key)
+            # # line.packet.timestamp_text
+            # # line.process.process
+            # # line.count
+            # columns[self.tree_view["columns"][0]] = "gupdi"
+            # columns[self.tree_view["columns"][4]] = "gupdi"
+            # columns[self.tree_view["columns"][5]] = "gupdi"
+            self.tree_view.set(key, column=self.tree_view["columns"][0], value=line.packet.timestamp_text)
+            self.tree_view.set(key, column=self.tree_view["columns"][4], value=line.process.process)
+            self.tree_view.set(key, column=self.tree_view["columns"][5], value=line.count)
+
+        # add those new
+        new_stuff = {
+            key: value for key, value in new_network_lines.items()
+            if key not in self.network_lines
+        }
+        for key, line in new_stuff.items():
             self.tree_view.insert(
-                "", i, line.packet.discriminator,
-                text=line.packet.timestamp_text,
+                "", "end", key,
+                text="",
                 values=(
+                    line.packet.timestamp_text,
                     f'{line.packet.type}/{line.packet.direction}',
                     line.packet.local_address,
                     line.packet.remote_address,
@@ -61,7 +92,8 @@ class P2pGui(threading.Thread):
                     line.count
                 )
             )
-            i += 1
+        if new_network_lines.keys():
+            self.network_lines = new_network_lines
         # for i in range(0, 100):
         #     self.tree_view.insert(
         #             "", i, str(i),
@@ -121,20 +153,23 @@ class P2pGui(threading.Thread):
         # shows eg
         # 08:13:00.654388  TCP/IN   192.168.0.153:49484     205.185.216.10:80      Warframe.x64.exe
         self.tree_view["columns"] = (
+            "timestamp",
             "protocol/direction",
             "local address port",
             "remote address port",
             "process",
             "packet count"
         )
-        self.tree_view.column("#0", stretch=True, width=135, minwidth=135, anchor="w")
+        self.tree_view.column("#0", stretch=False, width=1, minwidth=1, anchor="w")
+        self.tree_view.column("timestamp", stretch=True, width=135, minwidth=135, anchor="w")
         self.tree_view.column("protocol/direction", stretch=True, width=65, minwidth=65, anchor="w")
         self.tree_view.column("local address port", stretch=True, width=170, minwidth=160, anchor="w")
         self.tree_view.column("remote address port", stretch=True, width=170, minwidth=160, anchor="w")
         self.tree_view.column("process", stretch=True, width=100, minwidth=100, anchor="w")
         self.tree_view.column("packet count", stretch=True, width=100, minwidth=100, anchor="w")
 
-        self.tree_view.heading("#0", text="Timestamp", anchor="w")
+        self.tree_view.heading("#0", text="", anchor="w")
+        self.tree_view.heading("timestamp", text="Timestamp", anchor="w")
         self.tree_view.heading("protocol/direction", text="Protocol/Direction", anchor="w")
         self.tree_view.heading("local address port", text="Local Address:Port", anchor="w")
         self.tree_view.heading("remote address port", text="Remote Address Port", anchor="w")
@@ -152,6 +187,7 @@ class P2pGui(threading.Thread):
         scrollbar_vertical.pack(expand=False, side='right', fill='y', anchor="e")
         frame2.pack(expand=True, side="top", fill='both')
 
+        self.network_lines = {}
         self.root.after_idle(self.update_tree_view)
         self.root.mainloop()
 

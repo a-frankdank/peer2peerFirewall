@@ -135,7 +135,10 @@ class NetworkLine:
         self.packet = packet_input
         if NetworkLine.process_connections is None:
             NetworkLine.process_connections = ProcessConnection.read_process_connections()
-        self.process = NetworkLine.process_connections.get(packet_input.local_address, none_found)
+        if packet_input is None:
+            self.process = ProcessConnection()
+        else:
+            self.process = NetworkLine.process_connections.get(packet_input.local_address, none_found)
         self.count = count
 
     def update(self, network_packet: NetworkPacket):
