@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-
+import threading
 from typing import Dict
 
 import tkinter as tk
@@ -8,7 +8,7 @@ import tkinter.ttk as ttk
 import peer2peerFirewall as p2pFw
 
 
-class P2pGui:
+class P2pGui(threading.Thread):
     """renders the gui for the peer2peer firewall"""
 
     root: tk.Tk
@@ -19,7 +19,6 @@ class P2pGui:
     combo_box: ttk.Combobox
     combo_box_commands: Dict[str, str]
 
-    # p2pFwId: str
     keep_gui_looping = True
     start_up_p2pFw = False
 
@@ -28,7 +27,6 @@ class P2pGui:
             self.on_or_off_button["text"] = "off"
             self.on_or_off_button.configure(style="pR.TButton")
             self.combo_box.configure(state="readonly")
-            # self.root.after_cancel(self.p2pFwId)
             p2pFw.stop()
             self.start_up_p2pFw = False
             for child in self.tree_view.get_children():
@@ -37,9 +35,6 @@ class P2pGui:
             self.on_or_off_button["text"] = "on "
             self.on_or_off_button.configure(style="pG.TButton")
             self.combo_box.configure(state="disabled")
-            # self.p2pFwId = self.root.after(
-            #     0, p2pFw.main_loop, self.combo_box_commands[self.combo_box.get()], False
-            # )
             self.start_up_p2pFw = True
 
     def update_tree_view(self):
@@ -73,14 +68,15 @@ class P2pGui:
         #                     "" + str(i)
         #                     )
         #         )
+        self.root.after(5000, self.update_tree_view)
 
     def exit_gui(self):
         p2pFw.stop()
         self.start_up_p2pFw = False
         self.keep_gui_looping = False
-        self.root.destroy()
+        self.root.quit()
 
-    def __init__(self):
+    def run(self):
         self.root = tk.Tk()
         self.root.resizable(True, True)
         self.root.minsize(width=780, height=200)
@@ -127,8 +123,8 @@ class P2pGui:
             "process",
             "packet count"
         )
-        self.tree_view.column("#0", stretch=True, width=145, minwidth=145, anchor="w")
-        self.tree_view.column("protocol/direction", stretch=True, width=70, minwidth=60, anchor="w")
+        self.tree_view.column("#0", stretch=True, width=135, minwidth=135, anchor="w")
+        self.tree_view.column("protocol/direction", stretch=True, width=65, minwidth=65, anchor="w")
         self.tree_view.column("local address port", stretch=True, width=170, minwidth=160, anchor="w")
         self.tree_view.column("remote address port", stretch=True, width=170, minwidth=160, anchor="w")
         self.tree_view.column("process", stretch=True, width=100, minwidth=100, anchor="w")
@@ -152,16 +148,18 @@ class P2pGui:
         scrollbar_vertical.pack(expand=False, side='right', fill='y', anchor="e")
         frame2.pack(expand=True, side="top", fill='both')
 
-        while self.keep_gui_looping:
-            if self.start_up_p2pFw:
-                p2pFw.main_loop(
-                    self.combo_box_commands[self.combo_box.get()],
-                    False,
-                    self.root.update,
-                    self.update_tree_view
-                )
-            else:
-                self.root.update()
+        self.root.after_idle(self.update_tree_view)
+        self.root.mainloop()
+
+    def __init__(self):
+        threading.Thread.__init__(self)
+        self.start()
 
 
-P2pGui()
+p2pGui = P2pGui()
+while p2pGui.keep_gui_looping:
+    if p2pGui.start_up_p2pFw:
+        p2pFw.main_loop(
+            p2pGui.combo_box_commands[p2pGui.combo_box.get()],
+            False
+        )

@@ -36,10 +36,11 @@ class ProcessConnection:
         ProcessConnection.pc_ns = time.time_ns()
 
     @staticmethod
-    def assemble_process_connections(every_loop_function: Callable[[None], None] = None):
+    def assemble_process_connections():
         """assembles all ProcessConnections possible into inner_process_connections"""
 
-        ProcessConnection.update_processes_cache(every_loop_function)
+        # TODO dont we want to add the service name to svchost?
+        ProcessConnection.update_processes_cache()
 
         for connection in psutil.net_connections():
             # [sconn(fd=115, family= < AddressFamily.AF_INET: 2 >, type = < SocketType.SOCK_STREAM: 1 >, laddr = addr(
@@ -47,8 +48,6 @@ class ProcessConnection:
             # sconn(fd=117, family= < AddressFamily.AF_INET: 2 >, type = < SocketType.SOCK_STREAM: 1 >, laddr = addr(
             #  ip='10.0.0.1', port=43761), raddr = addr(ip='72.14.234.100', port=80), status = 'CLOSING', pid = 2987),
             # ...]
-            if every_loop_function:
-                every_loop_function()
 
             process_string = ProcessConnection.processes.get(connection.pid, connection.pid)
 
@@ -61,12 +60,10 @@ class ProcessConnection:
                 )
 
     @staticmethod
-    def update_processes_cache(every_loop_function: Callable[[None], None] = None):
+    def update_processes_cache():
         """updates the process cache (id + name)"""
 
         for pid in psutil.pids():
-            if every_loop_function:
-                every_loop_function()
             try:
                 process = psutil.Process(pid)
                 key3 = str(pid) + "/" + str(process.create_time())
@@ -176,12 +173,10 @@ class NetworkLine:
             line.print()
 
     @staticmethod
-    def reduce_lines(every_loop_function: Callable[[None], None] = None):
+    def reduce_lines():
         now = datetime.datetime.now()
         new_lines = {}
         for line in NetworkLine.network_lines.values():
-            if every_loop_function:
-                every_loop_function()
             # time since line.packet was added until now, in minutes
             minutes_diff = (now - line.packet.timestamp).total_seconds() / 60.0
             # delete after 3 minutes since the packet discriminator has been last seen
@@ -229,8 +224,6 @@ def stop():
 def main_loop(
         win_divert_filter: str = "tcp or udp",
         do_print: bool = False,
-        every_loop_function: Callable[[None], None] = None,
-        just_print_function: Callable[[None], None] = None
 ):
     print("filter: " + win_divert_filter)
     global stop_it
@@ -243,8 +236,6 @@ def main_loop(
         divert.open()
         while stop_it is False:
             packet = divert.recv()
-            if every_loop_function:
-                every_loop_function()
             try:
                 divert.send(packet)
             except OSError:
@@ -260,14 +251,12 @@ def main_loop(
                 # print(packet)
                 if time.time_ns() - ProcessConnection.pc_ns > 20000000:
                     ProcessConnection.pc_ns = time.time_ns()
-                    ProcessConnection.assemble_process_connections(every_loop_function)
+                    ProcessConnection.assemble_process_connections()
                 if time.time_ns() - NetworkLine.nl_ns > 5000000000:
                     NetworkLine.nl_ns = time.time_ns()
-                    NetworkLine.reduce_lines(every_loop_function)
+                    NetworkLine.reduce_lines()
                     if do_print:
                         NetworkLine.print_all_lines()
-                    if just_print_function:
-                        just_print_function()
                 NetworkLine.add_line(packet)
                 # print(
                 #     "packet: {:15s}  {:3s}/{:3s}  {:22s}  {:22s} {:30s}".format(
