@@ -39,19 +39,15 @@ class P2pGui(threading.Thread):
             self.combo_box.configure(state="disabled")
             self.tree_view.insert(
                 "", 0, "startUp",
-                text=" ", values=("", "", "starting up...", "", "", "")
+                text=" ", values=("", "", "", "starting up...", "", "", "")
             )
             self.network_lines["startUp"] = p2pFw.NetworkLine()
             self.start_up_p2pFw = True
-
-# TODO NetworkLines: save first occurrence ts!
 
 # TODO grouping by 'process' instead of displaying all individual packets
 #      1 process, n network lines
 #      individual processes are expandable / closable
 #      processes: alphabetically ordered. within, the order is: local_address, then protocol / direction
-
-# TODO gui: 2nd view: NetworkLines, ordered by first occurrence ts
 
 # TODO buttons: expand all / close all 'process groups'
 
@@ -60,6 +56,7 @@ class P2pGui(threading.Thread):
 #      extra columns: checkbox block port (both directions), block just this packet type (ie only out), ...
 
 # TODO lag spike function: add delay to certain packets...
+#      with settable delay in ms in extra column
 
 # TODO and adding a 'first seen' counter, to mimic those 1-4 numbers when hosting in warframe
 #      maybe make it nameable?
@@ -83,8 +80,8 @@ class P2pGui(threading.Thread):
         for key, line in present_stuff.items():
             # what can change: ts, process, count
             self.tree_view.set(key, column=self.tree_view["columns"][0], value=line.packet.timestamp_text)
-            self.tree_view.set(key, column=self.tree_view["columns"][4], value=line.process.process)
-            self.tree_view.set(key, column=self.tree_view["columns"][5], value=line.count)
+            self.tree_view.set(key, column=self.tree_view["columns"][5], value=line.process.process)
+            self.tree_view.set(key, column=self.tree_view["columns"][6], value=line.count)
 
         # add those new
         new_stuff = {
@@ -97,13 +94,22 @@ class P2pGui(threading.Thread):
                 text="",
                 values=(
                     line.packet.timestamp_text,
-                    f'{line.packet.type}/{line.packet.direction}',
+                    line.timestamp_first_occurrence_text,
+                    f"{line.packet.type}/{line.packet.direction}",
                     line.packet.local_address,
                     line.packet.remote_address,
                     line.process.process,
                     line.count
                 )
             )
+
+        # sort everything by first occurrence ts
+        for key in sorted(
+                    new_network_lines.keys(),
+                    key=lambda discriminator: new_network_lines[discriminator].timestamp_first_occurrence
+                 ):
+            self.tree_view.move(key, "", "end")
+
         if new_network_lines.keys():
             self.network_lines = new_network_lines
         # for i in range(0, 100):
@@ -127,10 +133,10 @@ class P2pGui(threading.Thread):
     def run(self):
         self.root = tk.Tk()
         self.root.resizable(True, True)
-        self.root.minsize(width=780, height=200)
-        self.root.protocol('WM_DELETE_WINDOW', self.exit_gui)
+        self.root.minsize(width=915, height=200)
+        self.root.protocol("WM_DELETE_WINDOW", self.exit_gui)
         style = ttk.Style(self.root)
-        style.theme_use('alt')
+        style.theme_use("alt")
         style.configure("pR.TButton", foreground="white", background="red2")
         style.map("pR.TButton", background=[("active", "red4"),
                                             ("pressed", "red4"),
@@ -166,6 +172,7 @@ class P2pGui(threading.Thread):
         # 08:13:00.654388  TCP/IN   192.168.0.153:49484     205.185.216.10:80      Warframe.x64.exe
         self.tree_view["columns"] = (
             "timestamp",
+            "first timestamp",
             "protocol/direction",
             "local address port",
             "remote address port",
@@ -174,6 +181,7 @@ class P2pGui(threading.Thread):
         )
         self.tree_view.column("#0", stretch=False, width=1, minwidth=1, anchor="w")
         self.tree_view.column("timestamp", stretch=True, width=135, minwidth=135, anchor="w")
+        self.tree_view.column("first timestamp", stretch=True, width=135, minwidth=135, anchor="w")
         self.tree_view.column("protocol/direction", stretch=True, width=65, minwidth=65, anchor="w")
         self.tree_view.column("local address port", stretch=True, width=170, minwidth=160, anchor="w")
         self.tree_view.column("remote address port", stretch=True, width=170, minwidth=160, anchor="w")
@@ -182,6 +190,7 @@ class P2pGui(threading.Thread):
 
         self.tree_view.heading("#0", text="", anchor="w")
         self.tree_view.heading("timestamp", text="Timestamp", anchor="w")
+        self.tree_view.heading("first timestamp", text="First seen", anchor="w")
         self.tree_view.heading("protocol/direction", text="Protocol/Direction", anchor="w")
         self.tree_view.heading("local address port", text="Local Address:Port", anchor="w")
         self.tree_view.heading("remote address port", text="Remote Address Port", anchor="w")
@@ -192,12 +201,12 @@ class P2pGui(threading.Thread):
         label.pack(expand=False, side="left", anchor="nw")
         self.combo_box.pack(expand=False, side="left", anchor="nw")
         separator.pack(expand=False, side="left", anchor="nw")
-        frame.pack(expand=False, side="top", fill='both')
+        frame.pack(expand=False, side="top", fill="both")
 
-        scrollbar_horizontal.pack(expand=False, side='bottom', fill='x', anchor="s")
-        self.tree_view.pack(expand=True, side="left", fill='both', anchor="w")
-        scrollbar_vertical.pack(expand=False, side='right', fill='y', anchor="e")
-        frame2.pack(expand=True, side="top", fill='both')
+        scrollbar_horizontal.pack(expand=False, side="bottom", fill="x", anchor="s")
+        self.tree_view.pack(expand=True, side="left", fill="both", anchor="w")
+        scrollbar_vertical.pack(expand=False, side="right", fill="y", anchor="e")
+        frame2.pack(expand=True, side="top", fill="both")
 
         self.network_lines = {}
         self.root.after_idle(self.update_tree_view)

@@ -67,7 +67,7 @@ class ProcessConnection:
         for pid in psutil.pids():
             try:
                 process = psutil.Process(pid)
-                key3 = f'{pid}/{process.create_time()}'
+                key3 = f"{pid}/{process.create_time()}"
                 if ProcessConnection.checked.get(key3, None) is None:
                     ProcessConnection.checked[key3] = 1
                     if process.name():
@@ -99,7 +99,7 @@ class NetworkPacket:
         self.type = "TCP" if packet_input.tcp else ("UDP" if packet_input.udp else "UNKNOWN")
         src_address = NetworkPacket.concat_address(packet_input.src_addr, packet_input.src_port)
         dst_address = NetworkPacket.concat_address(packet_input.dst_addr, packet_input.dst_port)
-        # 'we' aka my ip is always the local address, as being always left in comodo
+        # "we" aka my ip is always the local address, as being always left in comodo
         if packet_input.is_outbound:
             self.local_address = src_address
             self.local_port = packet_input.src_port
@@ -111,14 +111,14 @@ class NetworkPacket:
         self.timestamp_text = timestamp.strftime("%H:%M:%S.%f")
         self.timestamp = timestamp
         # self.discriminator = self.type + self.direction + self.local_address + self.remote_address
-        self.discriminator = f'{self.type}{self.direction}{self.local_address}{self.remote_address}'
+        self.discriminator = f"{self.type}{self.direction}{self.local_address}{self.remote_address}"
 
     @staticmethod
     def concat_address(adr, port):
         if port is None:
             return adr
         else:
-            return f'{adr}:{port}'
+            return f"{adr}:{port}"
 
 
 class NetworkLine:
@@ -137,8 +137,12 @@ class NetworkLine:
             NetworkLine.process_connections = ProcessConnection.read_process_connections()
         if packet_input is None:
             self.process = ProcessConnection()
+            self.timestamp_first_occurrence = None
+            self.timestamp_first_occurrence_text = None
         else:
             self.process = NetworkLine.process_connections.get(packet_input.local_address, none_found)
+            self.timestamp_first_occurrence = packet_input.timestamp
+            self.timestamp_first_occurrence_text = packet_input.timestamp_text
         self.count = count
 
     def update(self, network_packet: NetworkPacket):
@@ -164,8 +168,8 @@ class NetworkLine:
         """prints to console"""
 
         print(
-            "{:15s}  {:3s}/{:3s}  {:22s}  {:22s} {:30s} // {:10d} times".format(
-                self.packet.timestamp_text, self.packet.type, self.packet.direction,
+            "{:15s} {:15s}  {:3s}/{:3s}  {:22s}  {:22s} {:30s} // {:10d} times".format(
+                self.packet.timestamp_text, self.timestamp_first_occurrence_text, self.packet.type, self.packet.direction,
                 self.packet.local_address, self.packet.remote_address,
                 self.process.process, self.count
             )
@@ -285,7 +289,7 @@ def main_loop(
             raise e
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print("start")
 
     print("wanna take input from tcp, or udp, or both? default: both")
