@@ -41,11 +41,13 @@ class P2pGui(threading.Thread):
                 "", 0, "startUp",
                 text=" ", values=("", "", "", "starting up...", "", "", "")
             )
-            self.network_lines["startUp"] = p2pFw.NetworkLine()
+            self.network_lines["startUp"] = p2pFw.NetworkLine({})
             self.start_up_p2pFw = True
 
 # TODO grouping by 'process' instead of displaying all individual packets
 #      1 process, n network lines
+
+# TODO processes: new tab in gui for this
 #      individual processes are expandable / closable
 #      processes: alphabetically ordered. within, the order is: local_address, then protocol / direction
 

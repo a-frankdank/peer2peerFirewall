@@ -15,32 +15,37 @@ import psutil
 class ProcessConnection:
     """the process and one of its connections as extracted from psutils"""
 
-    inner_process_connections = {}
-
-    checked = {}
-    processes = {}
-
-    pc_ns = time.time_ns()
-
     def __init__(self, process: str = "", pid: int = -1, local_address: str = ""):
         self.process = process
         self.pid = pid
         self.local_address = local_address
 
-    @staticmethod
-    def clear():
-        ProcessConnection.inner_process_connections = {}
 
-        ProcessConnection.checked = {}
-        ProcessConnection.processes = {}
+class ProcessConnections:
+    """contains a dictionary of all ProcessConnection objects, and the logic to create that dictionary"""
 
-        ProcessConnection.pc_ns = time.time_ns()
+    none_found: ProcessConnection = ProcessConnection("no process found", -1, "")
 
-    @staticmethod
-    def assemble_process_connections():
-        """assembles all ProcessConnections possible into inner_process_connections"""
+    def __init__(self):
+        self.__inner_process_connections: Dict[str, ProcessConnection] = {}
 
-        ProcessConnection.update_processes_cache()
+        self.__checked: Dict[str, int] = {}
+        self.__processes: Dict[int, str] = {}
+
+        self.pc_ns: int = time.time_ns()
+
+    def clear(self) -> None:
+        self.__inner_process_connections = {}
+
+        self.__checked = {}
+        self.__processes = {}
+
+        self.pc_ns = time.time_ns()
+
+    def assemble_process_connections(self) -> None:
+        """assembles all ProcessConnections possible into"""
+
+        self.__update_processes_cache()
 
         for connection in psutil.net_connections():
             # [sconn(fd=115, family= < AddressFamily.AF_INET: 2 >, type = < SocketType.SOCK_STREAM: 1 >, laddr = addr(
@@ -49,50 +54,46 @@ class ProcessConnection:
             #  ip='10.0.0.1', port=43761), raddr = addr(ip='72.14.234.100', port=80), status = 'CLOSING', pid = 2987),
             # ...]
 
-            process_string = ProcessConnection.processes.get(connection.pid, connection.pid)
+            process_string = self.__processes.get(connection.pid, connection.pid)
 
             left_address = NetworkPacket.concat_address(connection.laddr.ip, connection.laddr.port)
 
-            ProcessConnection.inner_process_connections[left_address] = \
+            self.__inner_process_connections[left_address] = \
                 ProcessConnection(
                     process_string,
                     connection.pid,
                     left_address
                 )
 
-    @staticmethod
-    def update_processes_cache():
+    def __update_processes_cache(self) -> None:
         """updates the process cache (id + name)"""
 
         for pid in psutil.pids():
             try:
                 process = psutil.Process(pid)
                 key3 = f"{pid}/{process.create_time()}"
-                if ProcessConnection.checked.get(key3, None) is None:
-                    ProcessConnection.checked[key3] = 1
+                if self.__checked.get(key3, None) is None:
+                    self.__checked[key3] = 1
                     if process.name():
                         if process.name() == "svchost.exe":
                             service_names = [process.name()]
                             for service in psutil.win_service_iter():
                                 if service.pid() == pid:
                                     service_names.append(service.name())
-                            ProcessConnection.processes[pid] = "/".join(service_names)
+                            self.__processes[pid] = "/".join(service_names)
                         else:
-                            ProcessConnection.processes[pid] = process.name()
+                            self.__processes[pid] = process.name()
                     else:
-                        ProcessConnection.processes[pid] = pid
+                        self.__processes[pid] = pid
             except psutil.NoSuchProcess:
                 pass
 
-    @staticmethod
-    def read_process_connections():
-        """returns a Dict[str, ProcessConnection]"""
-
-        return ProcessConnection.inner_process_connections.copy()
+    def read_process_connections(self) -> Dict[str, ProcessConnection]:
+        return self.__inner_process_connections.copy()
 
 
 class NetworkPacket:
-    """the network packet received or sent cross referenced with open sockets"""
+    """the network packet received or sent"""
 
     def __init__(self, timestamp: datetime, packet_input: Packet = None):
         self.direction = "OUT" if packet_input.is_outbound else "IN"
@@ -125,43 +126,37 @@ class NetworkLine:
     """one network line contains one NetworkPacket information, combined with its the corresponding process and
        occurrence count """
 
-    process_connections = None
-
-    network_lines = {}
-
-    nl_ns = time.time_ns()
-
-    def __init__(self, packet_input: NetworkPacket = None, count: int = 0):
+    def __init__(self, process_connections2: Dict[str, ProcessConnection], packet_input: NetworkPacket = None,
+                 count: int = 0):
         self.packet = packet_input
-        if NetworkLine.process_connections is None:
-            NetworkLine.process_connections = ProcessConnection.read_process_connections()
         if packet_input is None:
             self.process = ProcessConnection()
             self.timestamp_first_occurrence = None
             self.timestamp_first_occurrence_text = None
         else:
-            self.process = NetworkLine.process_connections.get(packet_input.local_address, none_found)
+            self.process = ProcessConnections.none_found
+            self.renew_process(process_connections2)
             self.timestamp_first_occurrence = packet_input.timestamp
             self.timestamp_first_occurrence_text = packet_input.timestamp_text
         self.count = count
 
-    def update(self, network_packet: NetworkPacket):
+    def update(self, network_packet: NetworkPacket, process_connections2: Dict[str, ProcessConnection]):
         self.packet = network_packet
-        self.renew_process()
+        self.renew_process(process_connections2)
         self.count += 1
 
-    def renew_process(self):
+    def renew_process(self, process_connections2: Dict[str, ProcessConnection]):
         new_process = self.process
-        if new_process is none_found:
-            new_process = NetworkLine.process_connections.get(self.packet.local_address, none_found)
-            if new_process is none_found:
+        if new_process is ProcessConnections.none_found:
+            new_process = process_connections2.get(self.packet.local_address,
+                                                   ProcessConnections.none_found)
+            if new_process is ProcessConnections.none_found:
                 tmp_port = str(self.packet.local_port)
-                new_process = NetworkLine.process_connections.get("0.0.0.0:" + tmp_port, none_found)
-                if new_process is none_found:
-                    new_process = NetworkLine.process_connections.get(":::" + tmp_port, none_found)
-                    if new_process is none_found:
-                        # print("re-read process_connections")
-                        NetworkLine.process_connections = ProcessConnection.read_process_connections()
+                new_process = process_connections2.get("0.0.0.0:" + tmp_port,
+                                                       ProcessConnections.none_found)
+                if new_process is ProcessConnections.none_found:
+                    new_process = process_connections2.get(":::" + tmp_port,
+                                                           ProcessConnections.none_found)
             self.process = new_process
 
     def print(self):
@@ -169,58 +164,86 @@ class NetworkLine:
 
         print(
             "{:15s} {:15s}  {:3s}/{:3s}  {:22s}  {:22s} {:30s} // {:10d} times".format(
-                self.packet.timestamp_text, self.timestamp_first_occurrence_text, self.packet.type, self.packet.direction,
-                self.packet.local_address, self.packet.remote_address,
+                self.packet.timestamp_text, self.timestamp_first_occurrence_text, self.packet.type,
+                self.packet.direction, self.packet.local_address, self.packet.remote_address,
                 self.process.process, self.count
             )
         )
 
-    @staticmethod
-    def clear():
-        NetworkLine.process_connections = None
 
-        NetworkLine.network_lines = {}
+class NetworkLines:
+    """contains all NetworkLines there are"""
 
-        NetworkLine.nl_ns = time.time_ns()
+    def __init__(self, process_connections2: ProcessConnections):
+        self.__process_connections_cache: Dict[str, ProcessConnection] = process_connections2.read_process_connections()
+        self.__process_connections: ProcessConnections = process_connections2
 
-    @staticmethod
-    def print_all_lines():
+        self.__network_lines: Dict[str, NetworkLine] = {}
+
+        self.nl_ns = time.time_ns()
+
+    def clear(self):
+        self.__process_connections_cache = None
+
+        self.__network_lines = {}
+
+        self.nl_ns = time.time_ns()
+
+    def print_all_lines(self):
         print("")
-        for line in list(NetworkLine.network_lines.values()):
+        for line in list(self.__network_lines.values()):
             line.print()
 
-    @staticmethod
-    def reduce_lines():
+    def reduce_lines(self):
         now = datetime.datetime.now()
         new_lines = {}
-        for line in NetworkLine.network_lines.values():
+        for line in self.__network_lines.values():
             # time since line.packet was added until now, in minutes
             minutes_diff = (now - line.packet.timestamp).total_seconds() / 60.0
             # delete after 3 minutes since the packet discriminator has been last seen
             if minutes_diff < 2:
-                if line.process is none_found:
-                    line.renew_process()
+                if line.process is ProcessConnections.none_found:
+                    self.__process_connections_cache = self.__process_connections.read_process_connections()
+                    line.renew_process(self.__process_connections_cache)
                 new_lines[line.packet.discriminator] = line
-        NetworkLine.network_lines = new_lines
+        self.__network_lines = new_lines
 
-    @staticmethod
-    def add_line(packet: Packet):
+    def add_line(self, packet: Packet):
         network_packet = NetworkPacket(datetime.datetime.now(), packet)
-        network_line = NetworkLine.network_lines.get(network_packet.discriminator, None)
+        network_line = self.__network_lines.get(network_packet.discriminator, None)
         if network_line is None:
-            NetworkLine.network_lines[network_packet.discriminator] = NetworkLine(network_packet, 1)
+            self.__network_lines[network_packet.discriminator] = \
+                NetworkLine(self.__process_connections_cache,
+                            network_packet,
+                            1)
         else:
-            network_line.update(network_packet)
+            if network_line.process is ProcessConnections.none_found:
+                self.__process_connections_cache = self.__process_connections.read_process_connections()
+            network_line.update(network_packet, self.__process_connections_cache)
+
+    def read_network_lines(self) -> Dict[str, NetworkLine]:
+        """returns a Dict[str, NetworkLine]"""
+        return self.__network_lines.copy()
 
 
-none_found = ProcessConnection("no process found", -1, "")
+# TODO go on
+class ProcessTraffic:
+    """contains a process grouped together with all its identified NetworkLines"""
+
+    def __init__(self, process: ProcessConnection = None):
+        self.process_connection = process
+        self.network_lines = []
+
+
+# begin of 'main' logic
+process_connections: ProcessConnections = ProcessConnections()
+network_lines: NetworkLines = NetworkLines(process_connections)
 stop_it = False
 
 
 def read_network_lines() -> Dict[str, NetworkLine]:
     """returns a Dict[str, NetworkLine]"""
-
-    return NetworkLine.network_lines.copy()
+    return network_lines.read_network_lines()
 
 
 def unregister(to_close):
@@ -260,20 +283,20 @@ def main_loop(
                 atexit.register(unregister, divert)
                 first_time = False
             if stop_it:
-                NetworkLine.clear()
-                ProcessConnection.clear()
+                network_lines.clear()
+                process_connections.clear()
                 break
             else:
                 # print(packet)
-                if time.time_ns() - ProcessConnection.pc_ns > 19000000:
-                    ProcessConnection.pc_ns = time.time_ns()
-                    ProcessConnection.assemble_process_connections()
-                if time.time_ns() - NetworkLine.nl_ns > 5000000000:
-                    NetworkLine.nl_ns = time.time_ns()
-                    NetworkLine.reduce_lines()
+                if time.time_ns() - process_connections.pc_ns > 19000000:
+                    process_connections.pc_ns = time.time_ns()
+                    process_connections.assemble_process_connections()
+                if time.time_ns() - network_lines.nl_ns > 5000000000:
+                    network_lines.nl_ns = time.time_ns()
+                    network_lines.reduce_lines()
                     if do_print:
-                        NetworkLine.print_all_lines()
-                NetworkLine.add_line(packet)
+                        network_lines.print_all_lines()
+                network_lines.add_line(packet)
                 # print(
                 #     "packet: {:15s}  {:3s}/{:3s}  {:22s}  {:22s} {:30s}".format(
                 #         network_packet.timestamp, network_packet.type, network_packet.direction,
