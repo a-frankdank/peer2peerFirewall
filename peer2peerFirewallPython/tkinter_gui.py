@@ -44,6 +44,26 @@ class P2pGui(threading.Thread):
             self.network_lines["startUp"] = p2pFw.NetworkLine()
             self.start_up_p2pFw = True
 
+# TODO NetworkLines: save first occurrence ts!
+
+# TODO grouping by 'process' instead of displaying all individual packets
+#      1 process, n network lines
+#      individual processes are expandable / closable
+#      processes: alphabetically ordered. within, the order is: local_address, then protocol / direction
+
+# TODO gui: 2nd view: NetworkLines, ordered by first occurrence ts
+
+# TODO buttons: expand all / close all 'process groups'
+
+# TODO and then blocking specific sockets - with display of the black list: on/off clears it
+#      blacklist entry also gets deleted when it's not seen anymore (too old)
+#      extra columns: checkbox block port (both directions), block just this packet type (ie only out), ...
+
+# TODO lag spike function: add delay to certain packets...
+
+# TODO and adding a 'first seen' counter, to mimic those 1-4 numbers when hosting in warframe
+#      maybe make it nameable?
+
     def update_tree_view(self):
         new_network_lines = p2pFw.read_network_lines()
         # delete those not present anymore
@@ -55,7 +75,6 @@ class P2pGui(threading.Thread):
             for to_delete in deleted_stuff:
                 self.tree_view.delete(to_delete)
 
-        # TODO finish up
         # edit those present
         present_stuff = {
             key: value for key, value in new_network_lines.items()
@@ -63,13 +82,6 @@ class P2pGui(threading.Thread):
         }
         for key, line in present_stuff.items():
             # what can change: ts, process, count
-            # columns = self.tree_view.set(key)
-            # # line.packet.timestamp_text
-            # # line.process.process
-            # # line.count
-            # columns[self.tree_view["columns"][0]] = "gupdi"
-            # columns[self.tree_view["columns"][4]] = "gupdi"
-            # columns[self.tree_view["columns"][5]] = "gupdi"
             self.tree_view.set(key, column=self.tree_view["columns"][0], value=line.packet.timestamp_text)
             self.tree_view.set(key, column=self.tree_view["columns"][4], value=line.process.process)
             self.tree_view.set(key, column=self.tree_view["columns"][5], value=line.count)
