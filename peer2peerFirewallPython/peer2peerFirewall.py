@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-from typing import Dict
+from typing import Dict, List
 
 import pydivert
 from pydivert import Packet
@@ -22,7 +22,7 @@ class ProcessConnection:
 
 
 class ProcessConnections:
-    """contains a dictionary of all ProcessConnection objects, and the logic to create that dictionary"""
+    """contains a dictionary of all ProcessConnection objects, grouped by their local_addresses, and the logic to create that dictionary"""
 
     none_found: ProcessConnection = ProcessConnection("no process found", -1, "")
 
@@ -159,11 +159,12 @@ class NetworkLine:
                                                            ProcessConnections.none_found)
             self.process = new_process
 
-    def print(self):
+    def print(self, prefix: str = ""):
         """prints to console"""
 
         print(
-            "{:15s} {:15s}  {:3s}/{:3s}  {:22s}  {:22s} {:30s} // {:10d} times".format(
+            "{:s}{:15s} {:15s}  {:3s}/{:3s}  {:22s}  {:22s} {:30s} // {:10d} times".format(
+                prefix,
                 self.packet.timestamp_text, self.timestamp_first_occurrence_text, self.packet.type,
                 self.packet.direction, self.packet.local_address, self.packet.remote_address,
                 self.process.process, self.count
@@ -172,7 +173,7 @@ class NetworkLine:
 
 
 class NetworkLines:
-    """contains all NetworkLines there are"""
+    """contains a dictionary of all NetworkLines, grouped by their packet discriminator"""
 
     def __init__(self, process_connections2: ProcessConnections):
         self.__process_connections_cache: Dict[str, ProcessConnection] = process_connections2.read_process_connections()
@@ -226,13 +227,43 @@ class NetworkLines:
         return self.__network_lines.copy()
 
 
-# TODO go on
 class ProcessTraffic:
     """contains a process grouped together with all its identified NetworkLines"""
 
-    def __init__(self, process: ProcessConnection = None):
-        self.process_connection = process
-        self.network_lines = []
+    def __init__(self, process: ProcessConnection = None, network_line: NetworkLine = None):
+        self.process_connection: ProcessConnection = process
+        self.network_lines: List[NetworkLine] = []
+        if network_line is not None:
+            self.add_network_line(network_line)
+
+    def add_network_line(self, network_line: NetworkLine):
+        self.network_lines.append(network_line)
+
+    def print(self):
+        """prints to console"""
+
+        print("process: " + self.process_connection.process)
+        for line in list(self.network_lines):
+            line.print(" ")
+
+
+# TODO can this be made more performant?
+class ProcessTraffics:
+    """contains a dictionary grouping all ProcessTraffic classes per process id"""
+
+    def __init__(self, network_lines2: Dict[str, NetworkLine]):
+        self.__process_traffics: Dict[str, ProcessTraffic] = {}
+        for line in network_lines2.values():
+            traffic = self.__process_traffics.get(line.process.process, None)
+            if traffic is not None:
+                self.__process_traffics[line.process.process].add_network_line(line)
+            else:
+                self.__process_traffics[line.process.process] = ProcessTraffic(line.process, line)
+
+    def print_all_lines(self):
+        print("")
+        for line in list(self.__process_traffics.values()):
+            line.print()
 
 
 # begin of 'main' logic
@@ -263,6 +294,7 @@ def stop():
 def main_loop(
         win_divert_filter: str = "tcp or udp",
         do_print: bool = False,
+        do_print_traffics: bool = False
 ):
     print("filter: " + win_divert_filter)
     global stop_it
@@ -296,6 +328,8 @@ def main_loop(
                     network_lines.reduce_lines()
                     if do_print:
                         network_lines.print_all_lines()
+                    if do_print_traffics:
+                        ProcessTraffics(network_lines.read_network_lines()).print_all_lines()
                 network_lines.add_line(packet)
                 # print(
                 #     "packet: {:15s}  {:3s}/{:3s}  {:22s}  {:22s} {:30s}".format(
@@ -314,13 +348,19 @@ def main_loop(
 
 if __name__ == "__main__":
     print("start")
-
-    print("wanna take input from tcp, or udp, or both? default: both")
-    decision = input()
+    while True:
+        try:
+            boolean = {"true": True, "false": False}[
+                input("wanna see network_lines (true) or process_traffics (false)?").lower()
+            ]
+            break
+        except KeyError:
+            print("Invalid input please enter true or false!")
+    decision = input("wanna take input from tcp, or udp, or both? default: both")
     if decision == "udp":
-        main_loop("udp", True)
+        main_loop("udp", boolean, not boolean)
     else:
         if decision == "tcp":
-            main_loop("tcp", True)
+            main_loop("tcp", boolean, not boolean)
         else:
-            main_loop(do_print=True)
+            main_loop(do_print=boolean, do_print_traffics=not boolean)
