@@ -10,7 +10,9 @@ import java.nio.charset.Charset;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PublicIpGetter {
 	public static final String PUBLICIPSERVICE = "https://api.ipify.org";
 	private static final Log logger = LogFactory.getLog(PublicIpGetter.class);
@@ -26,6 +28,7 @@ public class PublicIpGetter {
 
 	public String getMyPublicIp() {
 		URL url;
+		StringBuilder errorString = new StringBuilder();
 		try {
 			url = new URL(PUBLICIPSERVICE);
 			try (BufferedReader rd = new BufferedReader(new InputStreamReader(
@@ -33,10 +36,12 @@ public class PublicIpGetter {
 				return readAll(rd);
 			} catch (IOException e) {
 				logger.error("error getting public ip", e);
+				errorString.append(e.getMessage());
 			}
 		} catch (MalformedURLException mre) {
 			logger.error("error getting public ip", mre);
+			errorString.append(mre.getMessage());
 		}
-		return "error getting public ip";
+		return "error getting public ip: " + errorString;
 	}
 }

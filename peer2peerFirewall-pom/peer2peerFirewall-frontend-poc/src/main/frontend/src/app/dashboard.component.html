@@ -1,0 +1,10 @@
+<h3>my dashboard</h3>
+    <h4>Top Greetings</h4>
+    <div class="grid grid-pad">
+      <a *ngFor="let greeting of greetings" [routerLink]="['/greetingDetail', greeting.id]" class="col-1-4">
+        <div class="module greeting">
+          <h4>{{greeting.content}}</h4>
+        </div>
+      </a>
+    </div>
+    <greeting-search></greeting-search>

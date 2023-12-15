@@ -1,0 +1,21 @@
+
+
+
+table.codr tr:nth-child(even) {
+    background-color: #eee;
+}
+table.codr tr:nth-child(odd) {
+   background-color:#fff;
+}
+table.codr th {
+    background-color: aliceblue;
+}
+table.codr tr.selectedCodr, .selectedCodr {
+    background-color: burlywood;
+}
+table.codr tr.selectedCodr:hover {
+    background-color: coral;
+}
+table.codr tr:hover {
+    background-color: #f15a00;
+}

@@ -1,0 +1,23 @@
+<h1>Here come the greetings</h1>
+<div *ngIf="greeting">
+	<div>
+		<label>greeting.id: </label>
+		<div>
+			<em>{{greeting?.id}}</em>
+		</div>
+		<div>
+			<input [(ngModel)]="greeting.id" placeholder="id">
+		</div>
+	</div>
+	<div>
+		<label>greeting.content: </label>
+		<div>
+			<em>{{greeting?.content}}</em>
+		</div>
+		<div>
+			<input [(ngModel)]="greeting.content" placeholder="content">
+		</div>
+	</div>
+</div>
+<button (click)="goBack()">Back</button>
+<button (click)="save()">Save</button>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+		</Console>
+	</Appenders>
+
+	<Loggers>
+		<Logger name="at.ltd.tools.fw.peer2peerFirewall" level="DEBUG" />
+		<!-- misc spring... -->
+		<Logger name="org.springframework.boot" level="WARN" />
+		<Logger name="org.springframework.boot.web" level="WARN" />
+		<Logger name="org.springframework.boot.actuate" level="WARN" />
+		<Logger name="org.springframework.boot.context" level="INFO" />
+		<Logger name="org.springframework.boot.admin" level="INFO" />
+		<Logger
+			name="org.springframework.boot.autoconfigure.logging.AutoConfigurationReportLoggingInitializer"
+			level="WARN" />
+		<Logger
+			name="org.springframework.boot.actuate.endpoint.jmx.EndpointMBeanExporter"
+			level="WARN" />
+		<Logger
+			name="org.springframework.boot.actuate.endpoint.mvc.EndpointHandlerMapping"
+			level="WARN" />
+		<Logger name="org.hibernate.validator.internal.util.Version"
+			level="WARN" />
+
+		<Root level="INFO">
+			<AppenderRef ref="Console" />
+		</Root>
+	</Loggers>
+</Configuration>

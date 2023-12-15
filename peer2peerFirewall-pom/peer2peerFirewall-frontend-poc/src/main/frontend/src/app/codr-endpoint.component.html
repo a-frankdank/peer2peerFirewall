@@ -1,0 +1,16 @@
+
+<h1>Networkstatus:</h1>
+<my-codr-endpoint-detail [codrEndpoint]="selectedCodr"></my-codr-endpoint-detail>
+<!-- TODO: bring list into own component ! -->
+<table class="codr">
+	<tr *ngFor="let codr of codrs" [class.selectedCodr]="codr === selectedCodr" (click)="onSelectCodr(codr)">
+		<td>{{codr?.srcAdress}}:{{codr?.srcPort}}</td>
+		<td>{{codr?.dstAdress}}:{{codr?.dstPort}}</td>
+		<td>{{codr?.timeLastChanged | date:'yMMdd-HH:mm:ss' }}</td>
+		<td>{{codr?.label}}</td>
+	</tr>
+</table>
+<!--
+date pretty-print:		
+  | date:'yMMdd-HH:mm:ss' 
+-->
